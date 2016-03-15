@@ -4,7 +4,8 @@
   hosts: all
 
   vars:
-    ZabbixServer: 10.23.220.35
+    ZabbixServerNet: 10.23.220.35
+    ZabbixServerCom: 10.22.117.6
 
   tasks:
   - name: create zabbix config file
