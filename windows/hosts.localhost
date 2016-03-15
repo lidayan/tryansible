@@ -1,0 +1,10 @@
+
+192.168.91.1
+
+
+[all:vars]
+ansible_connection=winrm 
+ansible_port=5985
+ansible_user=Administrator
+ansible_password="123456"
+
