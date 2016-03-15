@@ -1,0 +1,20 @@
+---
+
+- name: ensure zabbix agent conf
+  hosts: all
+
+  vars:
+    ZabbixServer: 10.23.220.35
+
+  tasks:
+  - name: create zabbix config file
+    win_template: 
+      src: templates/zabbix_agentd.win.conf.tpl
+      dest: c:/zabbix/conf/zabbix_agentd.win.conf
+    notify: restart zabbix agent
+
+  handlers:
+  - name: restart zabbix agent
+    win_service: 
+      name: Zabbix Agent
+      state: restarted

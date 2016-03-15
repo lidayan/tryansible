@@ -1,0 +1,8 @@
+
+[stg]
+portal01.vpc.wmcloud-stg.com
+
+[prd]
+web01.vpc.wmcloud.com
+web02.vpc.wmcloud.com
+db01.vpc.wmcloud.com

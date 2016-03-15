@@ -1,0 +1,10 @@
+---
+- name: install pmsweb
+  hosts: test
+  remove_user: root
+  vars:
+    version: 2.6.1
+    buildnumber: 35
+    deb_filename: pms-{{ version }}-{{ buildnumber }}.deb 
+  tasks:
+    command:   

@@ -1,0 +1,21 @@
+---
+
+- name: test playbook1
+  hosts: test qa
+
+  vars:
+    version: 2.6.1
+    buildnumber: 35
+    deb_filename: pms-{{ version }}-{{ buildnumber }}.deb 
+
+  tasks:
+    - name: task1
+      command: echo ok
+      notify:
+        - debug show version
+    - debug: var=deb_filename   
+
+  handlers:
+    - name: debug show version
+      debug: var=version
+   
