@@ -1,9 +1,0 @@
----
-- name: test script module
-  hosts: all
-  tasks:
-    - name: run test script
-      script: files/test.ps1
-      register: rrr
-
-    - debug: var=rrr.stdout
