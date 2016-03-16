@@ -1,7 +1,7 @@
 
 import winrm
 
-s=winrm.Session('192.168.91.1',auth=('administrator','123456'))
+s=winrm.Session('10.23.40.135',auth=('administrator','4rfv$RFV'))
 
 r = s.run_cmd('ipconfig', ['/all'])
 

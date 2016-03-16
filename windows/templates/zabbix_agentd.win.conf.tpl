@@ -12,7 +12,8 @@ ServerActive={{ ZabbixServerCom }}
 {% if ansible_fqdn.lower().startswith("dc") %}
 HostMetadata=dc
 {% else %}
-HostMetadata=client
+HostMetadata=desktop
 {% endif %}
 
-Timeout=3
+LogFile=c:\zabbix\log\zabbix_agentd.log
+Timeout=6

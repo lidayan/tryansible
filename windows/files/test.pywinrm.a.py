@@ -5,13 +5,13 @@ import sys
 import winrm
 
 user = r"administrator@datasset.datayes.net"
-host = "10.23.40.187"
+host = "10.23.40.135"
 print("Enter password for User [%s]" % user)
 pw = getpass.getpass()
 
 from winrm.protocol import Protocol
 p = Protocol(
-endpoint='http://'+host+':5985/wsman',
+endpoint='http://'+host+':5986/wsman',
 transport='plaintext',
 username=user,
 password=pw)

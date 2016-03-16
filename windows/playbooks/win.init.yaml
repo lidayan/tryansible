@@ -1,0 +1,19 @@
+---
+- name: windows powershell initialized
+  hosts: all 
+  gather_facts: False
+
+  tasks:
+  - name: copy powershell community extensions
+    win_copy: 
+      src: files/Pscx-3.2.0.msi
+      dest: c:\Pscx-3.2.0.msi
+    register: r0
+
+  - name: install powershell community extensions
+    win_msi: 
+      path: c:\Pscx-3.2.0.msi
+      state: present
+    when: r0.changed
+
+
