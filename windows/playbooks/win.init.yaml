@@ -6,7 +6,7 @@
   tasks:
   - name: copy powershell community extensions
     win_copy: 
-      src: files/Pscx-3.2.0.msi
+      src: ../files/Pscx-3.2.0.msi
       dest: c:\Pscx-3.2.0.msi
     register: r0
 

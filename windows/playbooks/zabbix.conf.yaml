@@ -10,18 +10,24 @@
   tasks:
   - name: copy zabbix package 
     win_copy:
-      src: files/zabbix.agent.zip
-      dest: c:/zabbix
-    notify: install zabbix service
+      src: ../files/zabbix.agent.zip
+      dest: c:\
+
+  - name: unzip zabbix package
+    win_unzip:
+      src: c:\zabbix.agent.zip
+      dest: c:\zabbix\
+    register: r1
 
   - name: install zabbix service
     raw: |
       sc.exe stop "zabbix_agent"; sc.exe delete "Zabbix Agent" ;
       C:\zabbix\bin\win64\zabbix_agentd.exe --config c:/zabbix/conf/zabbix_agentd.win.conf --install
+    when: r1.changed
 
   - name: create zabbix config file
     win_template: 
-      src: templates/zabbix_agentd.win.conf.tpl
+      src: ../templates/zabbix_agentd.win.conf.tpl
       dest: c:/zabbix/conf/zabbix_agentd.win.conf
     notify: restart zabbix agent
 

@@ -1,6 +1,6 @@
 ---
 - name: test stat module
-  hosts: 10.23.*
+  hosts: all
   gather_facts: False
 
 
@@ -19,17 +19,14 @@
 #              - "stat_file.stat.size > 0"
 #              - "stat_file.stat.md5"
 
-    - name: test module raw
-      raw: | 
-        echo "ok" ;
-        echo "good"; 
-      register: test
-      changed_when: True
-      notify: handler1
+    - name: copy zip file
+      win_copy:
+        src: ../files/zabbix.agent.zip 
+        dest: c:\
 
-    - debug: var=test
+    - name: unzip zipfile
+      win_unzip:
+        src: c:\zabbix.agent.zip
+        dest: c:\testzabbix
+     
 
-  handlers:
-    - name: handler1
-      debug: var=ansible_fqdn
-      #raw: echo handler1 run 
