@@ -8,6 +8,14 @@
     ZabbixServerCom: 10.22.117.6
 
   tasks:
+  - name: stop zabbix agent
+    raw: |
+      $ss = Get-Service -Name "Zabbix Agent" -ErrorAction SilentlyContinue | where { $_.status -eq "Running"  };
+      if ( $ss  ) {
+        Stop-service -Name "Zabbix Agent";
+      }
+      exit 0;
+
   - name: copy zabbix package 
     win_copy:
       src: ../files/zabbix.agent.zip

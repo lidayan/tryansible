@@ -15,6 +15,7 @@
       if ( $ss ) {
         Stop-service -Name "NTP";
       }
+      exit 0;
 
   - name: copy ntp package 
     win_copy:
