@@ -11,11 +11,10 @@
   tasks:
   - name: stop NTP agent
     raw: |
-      Get-Service -Name "NTP" -ErrorAction SilentlyContinue;
-      if ( $? ) {
+      $ss = Get-Service -Name "NTP" -ErrorAction SilentlyContinue | where { $_.status -eq "Running" };
+      if ( $ss ) {
         Stop-service -Name "NTP";
       }
-      exit 0; 
 
   - name: copy ntp package 
     win_copy:
