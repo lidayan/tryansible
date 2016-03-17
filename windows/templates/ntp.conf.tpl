@@ -1,0 +1,37 @@
+# NTP Network Time Protocol 
+# **** ATTENTION ****: *You have to restart the NTP service when you change this file to activate the changes* 
+# PLEASE CHECK THIS FILE CAREFULLY AND MODIFY IT IF REQUIRED 
+# Configuration File created by Windows Binary Distribution Installer Rev.: 1.27  mbg
+# please check http://www.ntp.org for additional documentation and background information
+# restrict access to avoid abuse of NTP for traffic amplification attacks 
+# see http://news.meinberg.de/244 for details  
+restrict default noquery nopeer nomodify notrap  
+restrict -6 default noquery nopeer nomodify notrap  
+ 
+# allow status queries and everything else from localhost 
+restrict 127.0.0.1 
+restrict -6 ::1 
+ 
+# if you need to allow access from a remote host, you can add lines like this: 
+# restrict <IP OF REMOTE HOST> 
+ 
+# Use drift file 
+driftfile "C:\Program Files (x86)\NTP\etc\ntp.drift"
+
+# your local system clock, could be used as a backup
+# (this is only useful if you need to distribute time no matter how good or bad it is)
+#server 127.127.1.0
+# but it should operate at a high stratum level to let the clients know and force them to
+# use any other timesource they may have.
+#fudge 127.127.1.0 stratum 12
+
+# Use specific NTP servers
+server ntp.datayes.net iburst minpoll 6 maxpoll 7
+{% if ansible_fqdn.lower().endswith("datayes.net") %}
+server {{NtpServerNet}} iburst minpoll 6 maxpoll 7
+{% else %}
+server {{NtpServerCom}} iburst minpoll 6 maxpoll 7
+{% endif %}
+
+
+# End of generated ntp.conf --- Please edit this to suite your needs

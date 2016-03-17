@@ -1,0 +1,973 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<HTML>
+<HEAD>
+<TITLE>Meinberg NTP Installer for Windows Systems : Readme</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+</HEAD>
+
+<BODY>
+<A NAME="startofpage">
+<A HREF="http://www.meinberg.de"><IMG border=0 SRC="./logo_i.gif"></A><P>
+This file is part of the Meinberg Windows Installer for NTP, which can be obtained <A HREF="http://www.meinberg.de/english/sw/ntp.htm">here</A>.
+(C)opyright 2007 <A HREF="http://www.meinberg.de">Meinberg Funkuhren</A>. You are allowed to freely distribute/publish this document, if you do not change it and include this copyright notice as well as the link to <A HREF="http://www.meinberg.de/english/sw/ntp.htm">Meinbergs NTP download page.</A>
+<HR>
+<TABLE width="95%" class="border" cellpadding=15><TR><TD>
+
+<H1>The Network Time Protocol</H1>
+<H2>Installing the binary version of the NTP Reference Implementation on Microsoft Windows based systems</H2>
+
+<B>Please note:</B>
+If you want to use the NTP reference implementation included in this software package, a number of legal terms apply. You need to read the <A HREF="#legal">legal section</A> of this document 
+and agree to these terms, otherwise you are not allowed to use any part of this software at all.
+
+<HR>
+
+<H3>Table of contents</H3>
+
+<OL>
+	<LI><A HREF="#intro">Introduction</A>
+		<UL>
+			<LI>Informations about ...			
+				<UL>
+					<LI><A HREF="#aboutme">This Document</A></LI>				
+					<LI><A HREF="#aboutntp">The Network Time Protocol (NTP)</A></LI>				
+					<LI><A HREF="#aboutntpri">The Reference Implementation of the NTP Project</A></LI>
+					<LI><A HREF="#aboutntpbinmbg">The Meinberg Binary Distribution of NTP and The Installer</A></LI>
+				</UL>
+			</LI>
+			
+		</UL>
+	<P>
+	</LI>
+	
+	
+	<LI><A HREF="#before">Before You Start</A>
+		<UL>			
+			<LI><A HREF="#requirements">System Requirements</A></LI>			
+			<LI><A HREF="#accessrights">Necessary User Rights</A></LI>			
+		</UL>
+	<P>
+	</LI>
+
+	<LI><A HREF="#install">The Installation Procedure</A>
+	
+		<UL>
+			
+			<LI><A HREF="#download">Downloading</A>
+				<UL>
+					<LI><A HREF="#download">Getting the latest version</A></LI>
+				</UL>
+			</LI>
+			
+			<LI><A HREF="#installer">Installing NTP</A>
+			<UL>
+				<LI><A HREF="#starting">Step 1: Starting the Installer</A></LI>
+				<LI><A HREF="#destination">Step 2. The Destination Folder</A></LI>
+				<LI><A HREF="#components">Step 3. Components Selection</A>
+					<UL>
+						<LI><A HREF="#ntpdaemon">The NTP daemon</A></LI>
+						<LI><A HREF="#ntptools">The NTP tools</A></LI>
+						<LI><A HREF="#ntpdoc">The NTP documentation</A></LI>
+						<LI><A HREF="#ntpstartmenu">Start Menu Entries</A></LI>
+						<LI><A HREF="#settings">Settings</A></LI>
+						<LI><A HREF="#openssl">The OpenSSL libraries</A></LI>
+					</UL>
+				</LI>
+				<LI><A HREF="#copyfiles">Step 4. Copying Files</A></LI>				
+				<LI><A HREF="#configfile">Step 5. Configuration File Settings</A></LI>
+				<LI><A HREF="#service">Step 6. Service Settings</A></LI>
+				<LI><A HREF="#serviceaccount">Step 7. Specify Service Account</A></LI>				
+				<LI><A HREF="#startservice">Step 8. Finish Installation and Start Service</A></LI>
+			</UL>
+		</UL>	
+	<P>
+	</LI>
+		
+	<LI><A HREF="#upgrade">Upgrading NTP</A>
+		<UL>
+			<LI><A HREF="#upgrademode">Choose Upgrade Mode</A></LI>
+			<UL>
+				<LI><A HREF="#simplyupgrade">Simply Upgrading Files</A></LI>
+				<LI><A HREF="#reinstall">Reinstallation</A></LI>				
+			</UL>
+		</UL>
+	<P>
+	</LI>
+
+
+	<LI><A HREF="#uninstall">Uninstalling NTP</A>
+		<UL>
+			<LI><A HREF="#controlpanel">Using the Control Panel</A></LI>
+			<LI><A HREF="#uninstaller">Running the Uninstaller directly</A></LI>
+		</UL>
+	<P>
+	</LI>
+
+
+	<LI><A HREF="#unattended">Unattended Installation (Automatic/Silent Install)</A>
+	
+		<UL>			
+			<LI><A HREF="#ua_start">Running Installer in unattended mode</A></LI>
+			<LI><A HREF="#ua_template">Automatic Template Creation</A></LI>
+			<LI><A HREF="#ua_inifile">The INI-FIle: Configuration and Parameters for UAM</A></LI>
+			<UL>
+				<LI><A HREF="#ua_installer">General Installer Parameters</A></LI>
+				<LI><A HREF="#ua_components">Component Selection</A></LI>
+				<LI><A HREF="#ua_service">Service Parameters</A></LI>
+				<LI><A HREF="#ua_configuration">Configuration File</A></LI>
+				<LI><A HREF="#ua_sample">Sample INI FIle</A></LI>
+			</UL>
+			
+		</UL>
+	<P>
+	</LI>
+
+	<LI>Addendum
+	
+		<UL>			
+			<LI><A HREF="#troubleshoot">Troubleshooting</A></LI>
+			<LI><A HREF="#legal">Legal Section: License Terms, Copyright and other legal informations</A></LI>
+			
+		</UL>
+	<P>
+	</LI>
+
+</OL>
+
+
+<A NAME="intro"></A>
+<HR>
+
+<H2>Introduction</H2>
+
+<UL style="list-style-type:none">
+<LI>
+	<A NAME="aboutme"></A>
+	<H3>About this document</H3>
+	This document is part of the NTP binary distribution for Windows systems provided by <A HREF="http://www.meinberg.de">Meinberg Radio Clocks</A>. It contains short step-by-step instructions how to install this binary release of the NTP reference implementation
+	as well as some background and informations about the legal terms that apply if you decide to use NTP and the installer. 
+	<P>
+	
+	<A NAME="aboutntp"></A>
+	<H3>About the Network Time Protocol (NTP)</H3>
+	(taken from the <A HREF="http://www.ntp.org">NTP homepage</A>)<P>
+	
+	The Network Time Protocol (NTP) is used to synchronize the time of a computer client or server to 
+	another server or reference time source, such as a radio or satellite receiver or modem. It provides 
+	accuracies typically within a millisecond on LANs and up to a few tens of milliseconds on WANs relative 
+	to Coordinated Universal Time (UTC) via a Global Positioning Service (GPS) receiver, for example. 
+	Typical NTP configurations utilize multiple redundant servers and diverse network paths in order to 
+	achieve high accuracy and reliability.
+	
+	<A HREF="http://www.eecis.udel.edu/~mills/ntp/html/index.html">Read more...</A>
+	<P>
+	<A HREF="#startofpage">Back to top</A>
+	<P>
+	
+	<A NAME="aboutntpri"></A>
+	<H3>About the NTP Project and its Reference Implementation</H3>
+	(taken from the <A HREF="http://www.ntp.isc.org">ISC NTP Project homepage</A>)<P>
+	
+	The NTP Project (R&amp;D) produces a reference implementation of the NTP protocol, 
+	and implementation documentation, through a largely a volunteer effort. The NTP software distribution is copyrighted, 
+	as described in the <A HREF="http://ntp.isc.org/bin/view/Main/NTPcopyrightStatement">NTP copyright page</A>. <P>
+	
+	<A HREF="http://ntp.isc.org/">Read more...</A>
+	<P>
+	<A HREF="#startofpage">Back to top</A>
+	<P>
+	
+	<A NAME="aboutntpbinmbg"></A>
+	<H3>The Meinberg binary distribution of NTP for Windows Systems</H3>
+	Meinberg offers <A HREF="/english/products/">time synchronization hardware</A> 
+	(<A HREF="/english/products/ntp-time-server.htm">time servers</A> and <A HREF="/english/products/">reference time sources</A> like radio clocks)
+	and is often asked for software recommendations for the clients of a network that requires
+	synchronized time. <P>
+	
+	We are using the reference implementation of NTP in our <A HREF="/english/products/ntp-time-server.htm" class="nav-link">NTP time servers</A> and tested a number of
+	client software to be used for network time synchronization. We recommend NTP not only because it offers the highest compatibility but also an unmatched accuracy and reliability among all
+	tested network time synchronization products.<P>
+	
+	The NTP project mainly produces source code releases of NTP, at the moment there is no official Windows binary distribution available from them.  
+	Because a lot of their customers do not have the time or ressources to build their own binary version of NTP, we decided to offer a pre-compiled, 
+	easy-to-install software package including an actual version of NTP and all necessary third party add-ons (e.g. OpenSSL libraries).<P>
+	<P>
+	If you need a tool for monitoring your NTP time server and/or clients, please check out our <A HREF="http://www.meinberg.de/english/sw/time-server-monitor.htm">NTP Time Server Monitor</A>
+	application which can be downloaded free of charge from our <A HREF="http://www.meinberg.de/english/sw/time-server-monitor.htm">Website</A>.<P>
+	
+	<A HREF="#startofpage">Back to top</A>
+	<P>
+</LI>
+</UL>
+
+
+<A NAME="before"></A>
+<HR>
+<H2>Before you start</H2>
+<UL style="list-style-type:none">
+<LI>
+	<P>
+	<A NAME="requirements"></A>
+	
+	<H3>System Requirements</H3>
+	
+	<H4>Supported Operating Systems</H4>
+	
+	<UL style="list-style-type:none">
+		<LI>
+		This version of NTP only runs on Windows NT and its successors (e.g. Windows 2000, Windows 2003 and Windows XP machines). Windows 95, 98 and ME
+		are not supported by the installer and it will show you an error message and quit in case you do not trust us and try to run the installer under one of those operating systems :-)<P>
+		</LI>
+	</UL>
+	
+	<H4>Hardware Requirements</H4>
+	<UL style="list-style-type:none">
+		<LI>
+		The files installed need approx. 2-3 MB of harddisk space. NTP will run on any hardware that meets or exceeds the minimum hardware requirements 
+		of the underlying operating system.<P>
+		</LI>
+	</UL>
+
+	<P>
+	<A HREF="#startofpage">Back to top</A>
+	<P>
+	
+	<A NAME="accessrights"></A>
+	
+	<H3>Necessary user rights</H3>
+	
+	<UL style="list-style-type:none">
+		<LI>
+		In order to use this installer, you need Administrator rights. This is only necessary during installation, the NTP software itself runs fine
+		without admin rights, as long as the SetSystemTime privilege has been assigned to the account used for running the service and we strongly recommend to not run NTP (or any other
+		system service, if possible) using the local system account or any other account with full administrator rights. If you want, the installer will create a restricted account running the NTP service.	
+		</LI>
+	</UL>
+	<P>
+	<A HREF="#startofpage">Back to top</A>
+	<P>
+</LI>
+</UL>
+
+<A NAME="install"></A>
+<HR>
+<H2>The Installation Procedure</H2>
+<UL style="list-style-type:none">
+<LI>
+	<A NAME="download"></A>
+	<H3>Getting the latest version</H3>
+	Meinberg tries to update the installer at least as often as a new stable version of NTP has been released by the NTP project. 
+	If important bug fixes or new features have proven their stability, an updated installer may be released as a "developer version" without 
+	waiting for an official stable NTP release. So, mostly two versions of the installer ("latest" and "stable") will be available for download on the 
+	<A HREF="http://www.meinberg.de/english/sw/ntp.htm">Meinberg NTP download page</A>. 
+	<P>
+	<A HREF="#startofpage">Back to top</A>
+	<P>
+	
+	
+	<A NAME="installer"></A>
+	<H3>Installing NTP</H3>
+	
+	Please check that the target system meets the <A HREF="#requirements">system requirements</A> and that you logged on with sufficient
+	<A HREF="#accessrights">user rights</A>. <P>
+	
+	<A NAME="starting"></A>
+	<H4>Step 1: Starting the Installer: License Agreement</H4>
+	downloading the appropriate version coming as a one-file executable, double-click it to start the installation procedure.<P>
+	After checking that the <A HREF="#requirements">target operating system</A> is supported and that sufficient 
+	<A HREF="#accessrights">user rights</A> are present, the first page appears, containing legal informations covering the copyrights,
+	licenses and other legal terms. In order to proceed you need to agree to these terms by clicking the "I Agree" button.<P>
+	
+	<P>[<A HREF="#installer">Prev</A>][<A HREF="#destination">Next</A>][<A HREF="#startofpage">Top</A>]<P>
+	
+	<A NAME="destination"></A>
+	<H4>Step 2: Choosing the Destination Folder: Where to install</H4>
+	You need to specify the directory the files will be installed in, default is <I>PROGRAMDIR</I>\NTP. <I>PROGRAMDIR</I> is depending on
+	the language and install location of your Windows version, for a standard english windows version installed on drive C: this is
+	"C:\Program Files\".<P>
+		
+	During installation a number of subdirectories will be created, e.g. bin, etc and doc. You should keep an eye (or two) on security and
+	may want to restrict access to the destination folder after installation.<P>
+	
+	<P>[<A HREF="#starting">Prev</A>][<A HREF="#components">Next</A>][<A HREF="#startofpage">Top</A>]<P>
+
+	<A NAME="components"></A>
+	<H4>Step 3: Choosing Components: What to install</H4>
+	The installer offers you a number of components that can be selected for install. Per default, everything is selected and this should
+	fit most situations. Here is a list of all components and their meaning:<P>
+			
+	<P>[<A HREF="#destination">Prev</A>][<A HREF="#ntpdaemon">Next</A>][<A HREF="#startofpage">Top</A>]<P>
+
+	<UL style="list-style-type:none">
+	<LI>
+	<A NAME="ntpdaemon"></A>
+	<H5>The NTP daemon</H5>
+	A "daemon" is a term widely used in the Unix world. It stands for a service program running in the background (i.e. without a visible
+	interface like a window). The Windows equivalent are System Services, which can be controlled by using the Service Control Console
+	(services.msc). A Windows System Service can be run automatically at system startup and logs on in the background, without the need
+	of an interactive logon. <P>
+	Because the NTP daemon (ntpd.exe) is needed for client (i.e. aquire time) as well as server (i.e. distribute or redistribute) 
+	configurations, installation is mandatory and this component cannot be deselected.<P>
+	At a later stage you can choose whether it should start automatically with Windows or not.<P>
+	
+	<P>[<A HREF="#destination">Prev</A>][<A HREF="#ntptools">Next</A>][<A HREF="#startofpage">Top</A>]<P>
+
+	<A NAME="ntptools"></A>
+	<H5>The NTP Tools</H5>
+	This component contains a number of command line executables which are not needed when operating a NTP client or server, 
+	but they are very useful and should be included in every install. At the moment ntpq.exe, ntpdc.exe and ntp-keygen.exe are included
+	in this section. Please refer to the documentation of these commands in order to find out what they do.
+	
+	<P>[<A HREF="#ntpdaemon">Prev</A>][<A HREF="#ntpdoc">Next</A>][<A HREF="#startofpage">Top</A>]<P>
+
+	<A NAME="ntpdoc"></A>
+	<H5>The NTP Documentation</H5>
+	The NTP Public Services Project composed a comprehensive set of html pages forming the official NTP documentation. If you choose
+	to install this component, the documentation will be installed in the doc subdirectory of the destination folder.
+
+	<P>[<A HREF="#ntptools">Prev</A>][<A HREF="#ntpstartmenu">Next</A>][<A HREF="#startofpage">Top</A>]<P>
+
+	<A NAME="ntpstartmenu"></A>
+	<H5>Start Menu Entries</H5>
+	If you select this component (it is on per default) the installer will create entries in your start menu to allow you to start/stop/restart the NTP
+	service, edit your configuration file and browse the installed documentation. Additionally you will find a few interesting links to NTP related
+	websites in your NTP Start Menu (which is created as Meinberg/Network Time Protocol).
+	
+	<P>[<A HREF="#ntpdoc">Prev</A>][<A HREF="#settings">Next</A>][<A HREF="#startofpage">Top</A>]<P>
+
+	<A NAME="settings"></A>
+	<H5>Settings</H5>
+	This component actually does not include any files, it just allows you to enable/disable certain actions the installer is applying to your system.
+	The one and only setting that can be activated/deactivated is expanding the PATH environment variable of your system to include
+	the path to the NTP binaries. If you do not want to install multiple versions of NTP in different directories, we would recommend to
+	not disable this setting (it's selected per default). The PATH variable holds a list of semicolon separated directories where the system
+	should look for an executable file when you do not specify its full path. That means: You can use the command 'ntpq' anywhere without having
+	to type in the full path to the .exe file everytime you want to use it. <P>
+	
+	
+	<P>[<A HREF="#ntpdoc">Prev</A>][<A HREF="#openssl">Next</A>][<A HREF="#startofpage">Top</A>]<P>
+
+
+	<A NAME="openssl"></A>
+	<H5>OpenSSL libraries</H5>
+	Selecting this component will install two DLL files from the OpenSSL software distribution into the bin subdirectory of your NTP folder. You should leave that
+	turned on (that's the default) and only deselect it if you already have a copy of the OpenSSL DLLs (libeay32.dll and ssleay32.dll) in a place where NTP can
+	find them (e.g. the windows\system32 directory).<P>
+		
+	<P>[<A HREF="#settings">Prev</A>][<A HREF="#copyfiles">Next</A>][<A HREF="#startofpage">Top</A>]<P>
+	</LI>
+	</UL>
+	
+	<A NAME="copyfiles"></A>
+	<H4>Step 4: Copying files</H4>
+	When you finished selecting your wanted components, the installer starts copying the necessary files. Before this happens, it is checked if there is already
+	a NTP service running on this machine. If yes, you are asked if this service should be stopped before starting the copy process. It is recommended to
+	choose "Yes" (=stop the service) here in order to prevent file access errors when trying to eventually overwrite the ntpd.exe file of an already running instance of
+	NTP.
+	<P>
+
+	<P>[<A HREF="#openssl">Prev</A>][<A HREF="#configfile">Next</A>][<A HREF="#startofpage">Top</A>]<P>
+
+
+	<A NAME="configfile"></A>
+	<H4>Step 5: Configuration File Settings</H4>
+	After copying of the files has been completed, the configuration file page comes up. Here you can specify a location where the NTP daemon looks for its configuration file
+	(default is etc\ntp.conf in the directory where you installed NTP), whether an initial configuration file should be created for you and if you want to run NTP as a system service.<P>
+	You can use the "..." button to browse your files and find an already existing ntp.conf file. Under normal circumstances we recommend to not change the location of the config file and
+	simply use the setting your installer selected for you.<P>
+	
+	When you choose to create a configuration file (this should be done when installing NTP for the first time on your computer or if you do not want to use your old configuration file), you can
+	select which NTP servers you want to use for synchronization. <P>
+	
+	The installer comes with a drop down list (labelled "External Time Reference" or "Pool Server") which includes a number of countries where public NTP servers provided by the
+	<A HREF="http://www.pool.ntp.org">NTP Pool Project</A> are available. You should choose your county (or the nearest country) from the list and everytime your NTP daemon starts, you are
+	using a different NTP server thanks to a rotation mechanism (see the <A HREF="http://www.pool.ntp.org">Pool Project website</A> if you are interested in the details.<P>
+	
+	If the installer detects the Meinberg Time Adjustment Service, it allows you to choose "Follow Meinberg Time Service". The presence of this service indicates that your system
+	has a PCI radio clock from Meinberg installed or uses an external reference clock connected to a serial port. As the Meinberg Time Service already keeps the local clock of your
+	system synchronized to the Meinberg hardware clock, the NTP configuration would be set up to simply use the local clock as a time source with Stratum level 1. This configuration
+	makes sense if you want to use the Meinberg Time Service to get its time directly from a Meinberg device but would like to be able to distribute the time via NTP to your clients.<P>
+	
+	You are not able or do not want to use an entry of the drop down list because you are sitting behind a corporate firewall and the security policy permits no NTP connections to
+	the outside world? Or you do not have an internet connection or want to use a more reliable and accurate NTP server in your local network? No problem, the next field on this page
+	allows you to specify up to nine NTP servers manually. Just enter a comma-separated list of IP addresses or hostnames and there you go. <P>
+	
+	<B>Example:</B> In your local network you maintain three NTP servers with which you want to synchronize your Windows PC time. The NTP servers are called "tick", "tack" and "tock", so
+	all you have to do is to enter "tick,tack,tock" into the NTP server field (the one that is labelled "You can specify up to 9...") and that's it. <P>
+	
+	<B>Note:</B> On newer Windows versions there are two major bugs that prevent the system from achieving a good synchronization accuracy if the polling  interval is faster than 64 seconds and slower than 128 seconds. Therefore, the installer will automatically add "minpoll 6" and "maxpoll 7" to each server line.<p>
+	
+	<P>[<A HREF="#copyfiles">Prev</A>][<A HREF="#service">Next</A>][<A HREF="#startofpage">Top</A>]<P>
+
+
+	<A NAME="service"></A>
+	<H4>Step 6: Service Settings</H4>
+	After configuring the config file settings, you are presented with a dialogue where you have to specifiy how the service is installed.
+	First, you need to select the user account under which the service runs. 
+	
+	<H5>Service Account</H5>
+	A service logs on in the background, for this it needs a user account. 
+	You can either choose to create a new, specially dedicated user account for the NTP daemon or you can use an already existing account. The last option  is the possibility to run the service under the local SYSTEM account, which probably is the only working option if you are installing on a newer Windows Version (e.g. Windows 8+). You can change this in your service management console if you want to increase security on your system. You should use an already existing user only if you are reinstalling 
+	and want to reuse the dedicated user you created in a previous install.<P>
+	
+	This newly created user (its name and password has to be defined by you in the next step) will only be granted the right to logon as a service (no interactive or network logon allowed) and
+	maintain the system time (that's what you want from it, I suppose). Nothing else is allowed for this user, so if anyone ever tries to attack the NTP service and succeeds, he/she has very
+	limited possibilities to cause any harm on your system.<P>
+	
+	You can add extra security to your installation by changing the access rights for the NTP folder on your harddisk to let only Admin and the NTP user account access the files in it.<P>
+	
+	<H5>Starting Options</H5>
+	The NTP service can be run automatically when your system starts. If you want to start it manually (this makes only sense if you want to test NTP in non-productive environments), you
+	can deselect the check box &quot;<B>Start NTP service automatically</B>&quot;.<P>
+	
+	NTP depends on being the only one altering the system clock, so the next option "<B>Disable other Time Services eventually installed</B>" makes sure that at least a few services are
+	deactivated (the start option for these services is set to &quot;deactivated&quot;). This affects all services named &quot;NetworkTimeProtocol&quot;, &quot;Network Time Protocol&quot; and &quot;W32time&quot;. If you
+	do not want to let the installer mess around with your precious system, you can deselect this check box and the starting options for those services are left untouched. However, this
+	may cause NTP not to run properly or even prevent it from running at all. You have been warned :-) .<P>
+	
+	The next option (&quot;<B>Start NTP right after installation</B>&quot;) controls whether to start the service at the end of the installation or not. If you think it is better to check a few things first, you may want to deselect this option. If you chose to 
+	run NTP automatically, it will be started during the next system boot or manually by using the &quot;net start NTP&quot; command or the services.msc console.<P>
+	
+	Normally, the NTP daemon will exit immediately when it detects that your current system time is far off (>1024 seconds). If you want NTP to accept any time difference at startup and
+	correct it as soon as the correct time has been received from an NTP time source, you can leave the checkbox &quot;<B>Allow big initial timestep</B>&quot; on. Uncheck this option if you want NTP to 
+	stop and exit instead of stepping the time. <B>Note:</B> Even when this option is enabled, NTP will only accept a big time difference once at startup. If such a big difference occurs again later,
+	NTP will exit because this indicates that something is broken in your NTP/time synchronization infrastructure. <P>
+	
+	If the NTP version included in the installer supports the automatic enabling of the Windows multimedia timer, this can be turned off by unchecking the corresponding 
+	checkbox &quot;<B>Enable Multimedia Timer at Startup</B>&quot;. The per default enabled feature switches the internal timing of Windows in multimedia mode and prevents time shifts/steps when any other application using the multimedia
+	timer is started/stopped. <P>
+	
+	If your system comes with a version of the Windows Firewall (e.g. on XP SP2, Windows 2003 or Windows Vista), you can ask the installer to check if your firewall settings allow NTP to work properly. If you select the option &quot;<B>Check Firewall Settings</B>&quot;, 
+	the installer will check that and ask you if you want it to modify the firewall rules for you in order to allow NTP packets to pass through. This will effectively add an exception rule for UDP packets on port 123 (the NTP port) to your firewall settings.<P>
+	
+	
+	<P>[<A HREF="#configfile">Prev</A>][<A HREF="#serviceaccount">Next</A>][<A HREF="#startofpage">Top</A>]<P>
+
+
+	<A NAME="serviceaccount"></A>
+	<H4>Step 7: Specify Service Account</H4>
+	This step is skipped if you chose to run the NTP daemon under the SYSTEM account, but I am sure you did not choose to do so for security reasons.<P>
+	In case you selected to create a new dedicated NTP account, you have to enter its name (default is ntpd) and specify a password for the account. You are not allowed
+	to use the account name as your password and a minimum length of five characters is required. Do not forget to enter the password a second time in the "confirm" field.<P>
+	
+	If you chose to use an existing account, you will be asked for the username and the password of the existing account (no confirmation needed). Please make sure that you entered
+	the correct password, as a wrong input will prevent the service from running due to a login failure. <P>
+	
+	<P>[<A HREF="#service">Prev</A>][<A HREF="#startservice">Next</A>][<A HREF="#startofpage">Top</A>]<P>
+
+	<A NAME="startservice"></A>
+	<H4>Step 8: Finish Installation and Start the Service</H4>
+	
+	If you selected that the NTP service should be started at the end of the installation, this is done now. If an error message says that starting the service did not succeed, you should
+	look into your eventlog (run "eventvwr" to check it) and check the reasons for the failure in the system protocol and/or in the applications protocol.<P>
+	
+	On the last page of the installer you should now see what the installer did during the installation process. Click "Finish" and you are done. Congratulations!<P>
+	
+	<P>[<A HREF="#serviceaccount">Prev</A>][<A HREF="#startofpage">Top</A>]<P>
+
+</LI>
+</UL>
+
+<A NAME="upgrade"></A>
+<HR>
+<H2>Upgrading NTP</H2>
+<UL style="list-style-type:none">
+<LI>
+	If the installer detects an already existing installation of NTP (and if that installation was done using an old version of this installer), it will ask you directly after 
+	startup how to proceed, i.e. whether you want to simply upgrade your files or prefer a complete reinstallation. 
+<UL>
+<LI>
+	<A NAME="upgrademode"></A>
+	<H4>Upgrade Modes</H4>
+	
+	<A NAME="simplyupgrade"></A>
+	<H4>Simply Upgrading Files</H3>
+	If you choose to simply upgrade your files, exactly that will happen. Only the binaries, libraries and documentation files are overwritten with the version the installer provides,
+	no registry settings or directories will be changed. <P>
+	This mode is fine for minor upgrades.<P>
+	
+	<A NAME="reinstall"></A>
+	<H4>Complete Reinstallation</H3>
+	If you answer "No" to the Upgrade question at startup, NTP will be uninstalled automatically and then the installer starts the way it would if no old version has been detected.<P>
+	
+</LI>
+</UL>
+
+</UL>
+
+
+<A NAME="unattended"></A>
+<HR>
+<H2>Automatic or Unattended Installation of NTP</H2>
+<UL style="list-style-type:none">
+<LI>
+	<H3>Introduction</H3>
+	If you want to deploy NTP on a large number of PCs you probably want to automatize the installation process in order to save time and shoeleather-costs. The Meinberg NTP Installer
+	supports automatic/unattended installation by specifying an INI file which holds the settings you normally would enter via the various dialogues during the installation.
+
+	<LI>
+	<A NAME="ua_start"></A>
+	<H4>Running Installer in Unattended Mode (UAM)</H4>
+	In order to tell the installer that it should run in unattended mode, you have to specify the name of the INI file on the commandline. This can be done with the "/USE_FILE" option:
+	<PRE>
+	C:\> ntp_setup-win32-o.exe /USE_FILE=C:\my_settings.ini
+	</PRE>
+	</LI>
+	
+	<LI>
+		<A NAME="ua_inifile"></A>
+		<H4>The INI-File: Configuration and Parameters for the Unattended Mode (UAM)</H4>
+		The INI file that is used to define all required parameters for the installation is following standard Windows INI file format conventions. Parameters are grouped into four sections: 
+		<A HREF="#ua_installer">General Installer Parameters</A>, <A HREF="#ua_components">Component Selection</A>, <A HREF="#ua_service">NTP Service Parameters</A> and
+		<A HREF="#ua_configuration">NTP Configuration File Settings</A>. At the end of this chapter you will find a <A HREF="#ua_sample">sample INI file</A>, but first we will go through 
+		the sections and explain each available parameter.<P>
+		
+		<LI>
+		<A NAME="ua_template"></A>
+		<H4>Automatic Template File Creation</H4>
+		During a regular (interactive) installation the settings specified by the user will be collected and stored in a file install.ini in the installation directory of NTP (e.g. C:\Program Files\NTP), the only
+		exception is the service password, which will not be written into this file. You can use this automatically created install.ini file as a template for future unattended installs of NTP, but please
+		remember to check the settings first and modify them to suit your needs:
+		<UL>
+		<LI>Fill in the service password, it is not written into the template for security reasons</LI>
+		<LI>Change the location of the config file in order to use a prepared ntp.conf, this file path should be accessible from all PCs on which you want to run the unattended install (i.e. it
+		       should be on a network drive)</LI>
+		<LI>Check that the upgrade mode should be Reinstall or Upgrade, in case the unattended install is run more than once on a PC (it has no effect for a first-time install)</LI>
+		<LI>Please modify the location of the unattended install log file </LI>
+		</UL
+		
+		<A NAME="ua_installer"></A>
+		<H4>[Installer] General Installer Parameters</H4>
+		This section is defined with the <I>Installer</I> group header: <PRE>[Installer]</PRE>
+		All installer related parameters have to be defined here, e.g. the logfile and target directory. 
+		
+		<H5>InstallDir</H5>
+		One of the most important parameters, it  defines in which directory NTP should be installed. There will be subdirectories created (like <I>bin</I>, <I>etc</I> and <I>doc</I>).
+		Example:
+		<PRE>InstallDir=C:\NTP</PRE>
+		
+		<H5>Logfile</H5>
+		Due to the nature of an unattended installation there is no real way of finding out details about what went wrong when the installer did not successfully install NTP on the target machine. 
+		The Logfile that is written by the installer in unattended mode can help you in detecting any problems with your settings or system environment. With the <I>Logfile</I> parameter you 
+		specifiy the full path of the logfile.Example:
+		<PRE>Logfile=C:\TMP\NTP_UAM.LOG</PRE>
+		
+		<H5>UpgradeMode</H5>
+		If the target machine already runs a version of NTP you can use this parameter to tell the installer what to do with such an existing version. There are three possibilities:
+		<PRE>UpgradeMode=Upgrade</PRE>
+		will only upgrade the files and does not touch your service settings (like the service account or any commandline parameters)<P>
+		<PRE>UpgradeMode=Reinstall</PRE>
+		will uninstall the existing version and then perform a regular unattended installation based on the settings in the INI file<P>
+		<PRE>UpgradeMode=None</PRE>
+		will not do anything and simply aborts the installation at this point, keeping the existing version intact (basically you can specifiy anything but <I>Upgrade</I> or <I>Reinstall</I> in order
+		to achieve this behavior<P>
+		
+		
+		<H5>Silent</H5>
+		If you do not want your users to call you because of those strange messages that flash on the screen everytime you are installing/updating NTP on their PC, you can completely disable
+		all visual feedback (which in UAM means disaling the banners the are normally shown during installation) by specifying 
+		<PRE>Silent=Yes</PRE>
+		in the <I>Installer</I> section of your INI file. 	
+		</LI>
+		
+		
+		<BR><BR>
+		<LI>
+		<A NAME="ua_components"></A>
+		<H4>[Components] Components Selection</H4>
+		With this section you can control the scope of the installation. The NTP service (NTPD.EXE) is always installed, but there are optional components that can be deselected:
+		<PRE>InstallTools=No</PRE>
+		will skip installation of the NTP commandline tools like <I>ntpq</I> or <I>ntpdc</I>.
+		<PRE>InstallDocs=No</PRE>
+		will skip installation of the NTP documentation set (in <I>docs\</I>).
+		<PRE>InstallOpenSSL=No</PRE>
+		will skip installation of the OpenSSL library file(s), which are essential for running NTP on the target machine. The only reason why you would not want to install them here is when
+		they are already on the target machine (probably installed by some other application) and you prefer to use that version instead of  the one that comes with the NTP installer. <P>
+		<B>Please note</B> that you have a good chance to run into compatibility problems when you choose not to use the included OpenSSL version.
+		<PRE>CreateStartMenuEntries=no</PRE>
+		will skip creating entries in your Start Menu for starting/stopping/restarting the NTP service, for the documentation and for weblinks to interesting/important NTP related websites.
+		</LI>  
+		
+		<BR><BR>
+		<LI>
+		<A NAME="ua_service"></A>
+		<H4>[Service] NTP Service Parameters</H4>
+		This section controls the behavior of the NTP service and its installation on the target machine. <P>
+		
+		<H5>StartAfterInstallation</H5>
+		If you want the installer to start the service after the installation has been completed successfully, you have to specify
+		<PRE>StartAfterInstallation=Yes</PRE>
+		
+		<H5>AutoStart</H5>
+		Most people want the NTP service to start automatically when the target PC is booting Windows. This can be triggered by stating
+		<PRE>AutoStart=Yes</PRE>
+		in the INI file.
+		
+		<H5>ServiceAccount</H5>
+		The installer can either setup your NTP service to run as SYSTEM (e.g. with full administrative rights) or use a regular user account with limited access rights. This will reduce the
+		impact of any security issues with NTP and prevents an attacker to gain Administrator rights if they somehow manage to compromise NTP. We strongly recommend to run NTP using
+		such a limited user account. If you want to use the SYSTEM account, please specify 
+		<PRE>ServiceAccount=@SYSTEM</PRE>
+		in your INI file. If you want to use a limited rights account, please tell the installer the name of this account (it can be automatically created using the <I>CreateUser</I> parameter, see below).
+		Example:
+		<PRE>ServiceAccount=NTPService</PRE>
+		
+		<H5>CreateAccount</H5>
+		If your INI FIle includes a line like
+		<PRE>CreateAccount=Yes</PRE>
+		in the <I>Service</I> section of your INI file, the installer will try to create the NTP user account for you (you have to specify the name of the account with the <I>ServiceAccount</I> parameter). 
+		It will even setup the access rights of the newly created account and limit its privileges as far as possible. If the specified user account already exists and <I>CreateUser</I> is set to <I>Yes</I> the 
+		installer will still try to use that existing account. 
+		
+		<H5>ServicePassword</H5>
+		If you want to use an existing account or the installer should create one, you can specify the password here. This is of course a potential security problem, but if you let the installer create the
+		account for you, it will be only allowed to login as a service, which should dramatically reduce the risk of someone abusing the account. Example:
+		<PRE>ServicePassword=BackToTheFuture</PRE>
+		
+		<H5>DisableOthers</H5>
+		If the target machine already runs some kind of a time synchronization software, the installer can disable them for you when it installs NTP. There is no point in trying to allow
+		two programs to correct the time, the result will be that both fight about the system clock and each one will correct the corrections of the other software. If you want the installer
+		to look out for other time sync software,  you can specifiy
+		<PRE>DisableOthers=Yes</PRE>
+		in your INI file. Of course only known software (like W32time or older NTP installations) will be detected and the installer will only deactivate their service entry. Nothing is uninstalled or
+		removed!
+		
+		<H5>AllowBigInitialTimeStep</H5>
+		The default behavior of NTPD is that it will exit if it detects a time offset of more than 1024 seconds. This can be a problem if the target PC is off for more than ~20 minutes at system 
+		start, therefore you can allow NTPD to correct such a big offset once at startup by stepping the clock. This can be achieved by specifying <I>-g</I> on the commandline of NTP and 
+		specifying 
+		<PRE>AllowBigInitialTimeStep=Yes</PRE>
+		in your INI file will tell the installer to add <I>-g</I> to the coimmandline parameters of the NTP service. 
+		
+		<H5>EnableMMTimer</H5>
+		Windows applications can tell the system to enable the so-called Multimedia Timer in order to change the internal timing behavior of the Windows kernel. Altering this during normal
+		operation can lead to a sudden time jump of several miliseconds in one direction. When the MMTimer is switched back to normal afterwards, the time jumps back into the 
+		opposite direction. This will lead to NTP synchronization problems (obviously) and therefore NTPD can be told to permanently switch the MMTimer to the higher resolution in order to
+		prevent those time jumps when you open a Quicktime video or a fancy website with animation and sound. Example:
+		<PRE>EnableMMTimer=Yes</PRE>
+		It is recommended to use <I>Yes</I> here since there seem to be no performance problems and it prevents those milisecond time jumps as long as NTP is running. 
+		</LI> <!-- service -->
+
+		<H5>ModifyFirewall</H5>
+		If the Windows Firewall is enabled and allows exceptions, the installer
+		would add an exeception for NTP packets in order to allow them to pass the firewall. Setting this parameter to &quot;no&quot; will leave your firewall settings alone. 
+		<PRE>ModifyFirewall=No</PRE>
+		will skip the check for correct handling of NTP packets by the Windows Firewall (if applicable on your system). 
+
+	<BR><BR>
+		<LI>
+		<A NAME="ua_configuration"></A>
+		<H4>[Configuration] NTP Configuration File Settings</H4>
+		The NTP configuration file (usually called <I>ntp.conf</I>) is expected to be stored in the <I>etc</I> subdirectory of your installation path. The installer can copy a 
+		prepared NTP configuration file into that <I>etc</I> directory and configure the service to use it. You have to specify the full path of an already existing file with
+		<PRE>UseConfigFile=G:\ntp_client.conf</PRE>
+		in the <I>[Configuration]</I> section of your INI file and it will be copied to <I>C:\Program Files\NTP\etc\ntp_client.conf</I> by the installer (assuming that you specified 
+		<I>C:\Program Files\NTP</I> as the <I>InstallDir</I>. 
+		
+		</LI> <!-- config -->
+		
+	<LI> <!-- Inifile -->
+	
+	<LI>
+		<A NAME="ua_sample"></A>
+		<H4>Sample Configuration</H4>
+		
+		Here is an example of an INI file that can be used for the unattended installation of NTP:
+<PRE>
+[Installer]
+InstallDir=C:\NTP
+UpgradeMode=Reinstall
+Logfile=C:\ntp_silent.log
+Silent=Yes
+
+[Components]
+InstallTools=yes
+InstallDocs=no
+InstallOpenSSL=yes
+CreateStartMenuEntries=yes
+
+[Service]
+StartAfterInstallation=yes
+AutoStart=yes
+ServiceAccount=NTP
+CreateAccount=yes
+ServicePassword=carlosantana
+DisableOthers=yes
+AllowBigInitialTimestep=yes
+EnableMMTimer=yes
+ModifiyFirewall=yes
+
+[Configuration]
+UseConfigFile=C:\ntp_test.conf
+</PRE>
+	
+<P>[<A HREF="#startofpage">Top</A>]<P>
+</LI> <!-- UAM -->
+</UL>
+
+<A NAME="uninstall"></A>
+<HR>
+<H2>Uninstalling NTP</H2>
+<UL style="list-style-type:none">
+<LI>
+	
+	<A NAME="controlpanel"></A>
+	<H3>Using the Software Applet of the Control Panel</H3>
+	It is easy to remove the installation of NTP you installed using this installer. Just open your Windows control panel, double-click on the Software icon and browse the list of installed 
+	software on your system until you find an entry called "Network Time Protocol". Now press the "Uninstall" button (this may be a little bit different on Windows NT, if you 
+	face any difficulties, just check your operating systems documentation for informations on "Uninstalling third party software".<P>
+	
+	<A NAME="uninstaller"></A>
+	<H3>Running the uninstaller directly</H3>
+	During installation, an uninstaller executable (uninstall.exe) is copied into the NTP target folder (e.g. "C:\Program Files\NTP"). You can use the Windows Explorer and 
+	browse to this directory. Then start the uninstaller with a double-click. 
+
+</LI>
+</UL>
+
+<A NAME="addendum"></A>
+<HR>
+<H2>Addendum</H2>
+
+<UL style="list-style-type:none">
+<LI>
+	<A NAME="troubleshoot"></A>
+	<H3>Troubleshooting</H3>
+	
+	<H4>Problems starting the service</H4>
+	If the service does not start at the end of the installation, please check your eventlog (run "eventvwr" or start it from the control panel) and look into the System Section. If your
+	NTP daemon did not start because of problems with logging in, check that the correct username has been entered in the "Run Service As" field. This can be
+	done in the Services applet (Service Manager) of the control panel, check your Windows documentation for more details. <P>
+	If the username is correct, try to reset the password for this account in your user manager and enter the correct password in the appropriate fields in the service settings (Service Manager).<P>
+	
+	<H4>NTP does not function properly</H4>
+	If the service is starting properly (status is "Running" in the Service Manager), you can check if it is running the way you wanted by running the command "ntpq -p" on a commandline. It should
+	list all configured servers and their status. Please note that it takes some time before your NTPD will be synchronized to its upstream NTP servers. More about that can be found on 
+	our <A HREF="http://www.meinberg.de/english/info/ntp.htm">NTP information page</A>. <P>
+	
+</LI>
+<LI>
+	<A NAME="legal"></A>
+	<H3>Legal Section</H3>
+	Please carefully read all of the terms and conditions and make sure you fully understand them. If you are in doubt, you should seek professional legal advice (e.g. from a lawyer).
+	
+	This document refers to a software package consisting of three major parts:
+	<UL>
+	<LI><H4>The NTP Reference Implementation</H4>
+		Included is a precompiled ("binary") version of parts of the 
+		NTP reference implementation provided by <A HREF="http://www.ntp.isc.org">the Network Time Protocol Public Services project</A>.<P>
+		The NTP software distribution is copyrighted, as described in the <A HREF="http://www.ntp.org/jump.html?link=ntp.isc.org/bin/view/Main/NTPcopyrightStatement">
+		NTP copyright page</A>. At the time this document was written, this page contained the following copyright notice:
+		
+		<P><B>NTP Copyright Notice:</B>
+		<PRE><FONT SIZE=-1>
+***********************************************************************
+*                                                                     *
+* Copyright (c) David L. Mills 1992-2005                              *
+*                                                                     *
+* Permission to use, copy, modify, and distribute this software       *
+* and its documentation for any purpose and without fee is hereby     *
+* granted, provided that the above copyright notice appears in all    *
+* copies and that both the copyright notice and this permission       *
+* notice appear in supporting documentation, and that the name        *
+* University of Delaware not be used in advertising or publicity      *
+* pertaining to distribution of the software without specific,        *
+* written prior permission. The University of Delaware makes no       *
+* representations about the suitability this software for any         *
+* purpose. It is provided "as is" without express or implied          *
+* warranty.                                                           *
+*                                                                     *
+***********************************************************************
+	</PRE></FONT>
+	</LI>
+	
+	<LI><H4>OpenSSL</H4>
+	The installer installs (upon request - this is turned on by default) a precompiled ("binary") version of parts of the OpenSSL distribution, which is created and maintained by the <A HREF="http://www.openssl.org">OpenSSL Project</A>.<BR>
+	The OpenSSL toolkit stays under a dual license, i.e. both the conditions of
+	  the OpenSSL License and the original SSLeay license apply to the toolkit. You can read the actual version of the license on the 
+	  <A HREF="http://www.openssl.org/source/license.html">OpenSSL license page</A>.  At the time this document was written, this page contained the following license:
+	  
+		<P><B>OpenSSL License and copyright notice:</B>
+		<PRE><FONT SIZE=-1>
+		
+  LICENSE ISSUES
+  ==============
+
+  The OpenSSL toolkit stays under a dual license, i.e. both the conditions of
+  the OpenSSL License and the original SSLeay license apply to the toolkit.
+  See below for the actual license texts. Actually both licenses are BSD-style
+  Open Source licenses. In case of any license issues related to OpenSSL
+  please contact openssl-core@openssl.org.
+
+  OpenSSL License
+  ---------------
+
+/* ====================================================================
+ * Copyright (c) 1998-2003 The OpenSSL Project.  All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ *
+ * 3. All advertising materials mentioning features or use of this
+ *    software must display the following acknowledgment:
+ *    "This product includes software developed by the OpenSSL Project
+ *    for use in the OpenSSL Toolkit. (http://www.openssl.org/)"
+ *
+ * 4. The names "OpenSSL Toolkit" and "OpenSSL Project" must not be used to
+ *    endorse or promote products derived from this software without
+ *    prior written permission. For written permission, please contact
+ *    openssl-core@openssl.org.
+ *
+ * 5. Products derived from this software may not be called "OpenSSL"
+ *    nor may "OpenSSL" appear in their names without prior written
+ *    permission of the OpenSSL Project.
+ *
+ * 6. Redistributions of any form whatsoever must retain the following
+ *    acknowledgment:
+ *    "This product includes software developed by the OpenSSL Project
+ *    for use in the OpenSSL Toolkit (http://www.openssl.org/)"
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS'' AND ANY
+ * EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OpenSSL PROJECT OR
+ * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * ====================================================================
+ *
+ * This product includes cryptographic software written by Eric Young
+ * (eay@cryptsoft.com).  This product includes software written by Tim
+ * Hudson (tjh@cryptsoft.com).
+ *
+ */
+
+ Original SSLeay License
+ -----------------------
+
+/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
+ * All rights reserved.
+ *
+ * This package is an SSL implementation written
+ * by Eric Young (eay@cryptsoft.com).
+ * The implementation was written so as to conform with Netscapes SSL.
+ *
+ * This library is free for commercial and non-commercial use as long as
+ * the following conditions are aheared to.  The following conditions
+ * apply to all code found in this distribution, be it the RC4, RSA,
+ * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
+ * included with this distribution is covered by the same copyright terms
+ * except that the holder is Tim Hudson (tjh@cryptsoft.com).
+ *
+ * Copyright remains Eric Young's, and as such any Copyright notices in
+ * the code are not to be removed.
+ * If this package is used in a product, Eric Young should be given attribution
+ * as the author of the parts of the library used.
+ * This can be in the form of a textual message at program startup or
+ * in documentation (online or textual) provided with the package.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. All advertising materials mentioning features or use of this software
+ *    must display the following acknowledgement:
+ *    "This product includes cryptographic software written by
+ *     Eric Young (eay@cryptsoft.com)"
+ *    The word 'cryptographic' can be left out if the rouines from the library
+ *    being used are not cryptographic related :-).
+ * 4. If you include any Windows specific code (or a derivative thereof) from
+ *    the apps directory (application code) you must include an acknowledgement:
+ *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
+ *
+ * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ *
+ * The licence and distribution terms for any publically available version or
+ * derivative of this code cannot be changed.  i.e. this code cannot simply be
+ * copied and put under another distribution licence
+ * [including the GNU Public Licence.]
+ */
+	
+</FONT></PRE>
+	</LI>
+	
+	<LI><H4>The Meinberg Installer for NTP on Windows itself</H4>
+	The abovove components are combined in an installer application created by <A HREF="http://www.meinberg.de">Meinberg Radio Clocks, Germany</A> by using the 
+	<A HREF="http://nsis.sourceforge.net">Nullsoft Scriptable Installation System (NSIS)</A> from, well, <A HREF="http://www.winamp.com">Nullsoft, Inc.</A>. <BR>
+	This installer application (not NSIS itself) is coprighted like described below:
+	
+		<P><B>Meinberg Installer for NTP on Windows Copyright Notice:</B>
+		<PRE><FONT SIZE=-1>
+***********************************************************************
+*                                                                     *
+* Copyright (c) Meinberg Funkuhren 2005                               *
+*                                                                     *
+*     Meinberg Funkuhren                                              *
+*     Werner Meinberg                                                 *
+*     Auf der Landwehr 22                                             *
+*     31812 Bad Pyrmont                                               *
+*     Germany                                                         *
+*                                                                     *
+*     http://www.meinberg.de          info@meinberg.de                *
+*                                                                     *
+* Permission to use, copy, modify, and distribute this software       *
+* and its documentation for any purpose and without fee is hereby     *
+* granted, provided that the above copyright notice appears in all    *
+* copies and that both the copyright notice and this permission       *
+* notice appear in supporting documentation, and that the name        *
+*           Meinberg Funkuhren (Meinberg Radio Clocks)                *
+* not be used in advertising or publicity pertaining to distribution  *
+* of the software without specific, written prior permission.         *
+* Meinberg Funkuhren makes no representations about the suitability   *
+* of this software for any purpose. It is provided "as is" without    *
+* express or implied warranty.                                        *
+*                                                                     *
+***********************************************************************
+		</PRE></FONT>
+	
+	The License for NSIS - which we warmly recommend, as it is a powerful installation creator plus it's open sourced and free - can be found on the 
+	<A HREF="http://nsis.sourceforge.net/features/license/">NSIS License page</A>, but this license only applies to the Installation Creator, not to the products
+	that are produced with it (like the Meinberg Installer).
+	
+	<P>
+	
+	<A HREF="#startofpage">Back to top</A>
+	<P>
+	</LI>
+	</UL>
+</LI>
+</UL>
+
+</TD></TR></TABLE>
+
+</BODY>
+</HTML>

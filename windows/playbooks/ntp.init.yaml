@@ -1,0 +1,51 @@
+---
+
+- name: install ntp in windows
+  hosts: all
+
+  vars:
+    NtpServerNet: ntp.datayes.net
+    NtpServerCom: ntp.wmcloud.com
+    installpath: C:\Program Files (x86)\NTP
+
+  tasks:
+  - name: stop NTP agent
+    raw: |
+      Get-Service -Name "NTP" -ErrorAction SilentlyContinue;
+      if ( $? ) {
+        Stop-service -Name "NTP";
+      }
+      exit 0; 
+
+  - name: copy ntp package 
+    win_copy:
+      src: ../files/ntp.zip
+      dest: c:\
+
+  - name: unzip NTP package
+    win_unzip:
+      src: c:\ntp.zip
+      dest: "{{installpath}}"
+      recurse: True
+
+  - name: install ntp service
+    raw: |
+      Stop-Service -Name "windows time";
+      Get-Service -Name "NTP" -ErrorAction SilentlyContinue;
+      if ( -not $? ) {
+        New-Service -Name "NTP" -DisplayName "Network Time Protocol Daemon" -StartupType Automatic `
+          -BinaryPathName '{{installpath}}\bin\ntpd.exe -U 3 -M -g -c "{{installpath}}\etc\ntp.conf"' `
+          -Description "Synchronizes the local system clock to a reference time source and (eventually)";
+      }
+
+  - name: create NTP config file
+    win_template: 
+      src: ../templates/ntp.conf.tpl
+      dest: "{{installpath}}/etc/ntp.conf"
+    notify: restart NTP agent
+
+  - name: restart NTP agent
+    win_service: 
+      name: NTP
+      state: restarted
+
