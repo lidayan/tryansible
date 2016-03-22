@@ -1,0 +1,43 @@
+---
+
+- name: install or update pms
+  hosts: all
+
+  vars:
+    version: x.y.z-b
+    aft_com: artifactory.wmcloud.com
+    aft_net: artifactory.datayes.net
+    urlbase: /artifactory/invest-platform-release/com/datayes/pms/{{version}}/pms-{{version}}.deb
+    test: "{{aft_net if ansible_fqdn.lower().endswith('.net') else aft_com}}"
+
+  tasks:
+    - name: install apt-packages
+      apt:
+        name: 
+            - mysql
+            - authbind
+            - unzip
+
+    - name: useradd pms
+      name: pms
+      passwd: datayes@123
+      shell: /bin/bash
+      home: /datayes/invest-platform/pms
+      createhome: yes
+
+    - name: sudoer.d for pms
+      copy:
+        src: files/pms
+        dest: /etc/sudoers.d/pms
+
+    - name: authbind port 80 for pms
+      file:
+        path: /etc/authbind/byport/80
+        state: touch
+        mode: 0755
+        owner: pms
+
+    - name: download pms deb
+      shell: |
+        bakdir=bak.$(date +%Y%m%d);
+    
