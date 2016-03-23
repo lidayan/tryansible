@@ -11,6 +11,9 @@ dc.quantgloballlc.wmcloud.com
 [gateway]
 gateway.quantgloballlc.wmcloud.com
 
+[desktop]                                                 
+client01.leitoncapital.wmcloud.com ansible_host=10.22.76.5
+client02.leitoncapital.wmcloud.com ansible_host=10.22.76.4  
 
 [all:vars]
 ansible_connection=winrm 

@@ -1,0 +1,71 @@
+---
+
+- name: install or update attribution
+  hosts: all
+
+  vars:
+    version: "{{pmsversion}}"
+    aft_com: artifactory.wmcloud.com
+    aft_net: artifactory.datayes.net
+    deburl: http://{{aft_net if ansible_fqdn.lower().endswith('.net') else aft_com}}/artifactory/invest-platform-release/com/datayes/pms/{{version}}/pms-{{version}}-database.tar.gz
+
+  tasks:
+  - name: state for accountmaster
+    stat: 
+      path: /etc/init.d/mysql
+    register: accountmaster
+
+  - name: install apt-packages
+    apt:
+      name: [mysql, unzip]
+    when: not accountmaster.stat.exists
+
+  - service:
+      name: mysql
+      state: restarted
+
+  - name: initialize mysql
+    shell: |
+      PATH=/opt/mysql/server-5.6/bin/:$PATH
+      mysqladmin -u root password 'root@123';
+      mysql -uroot -p'root@123' -e "
+        grant all privileges on accountmaster.* to app_platform@'{{'.'.join(facter_ipaddress.split('.')[:3])}}.%' identified by 'We1come';
+        grant all on *.* to 'changmao.wang'@'localhost' identified by 'Datayes_DBA_2014' with grant option;
+        delete from mysql.user where password='';
+        flush privileges;
+      "
+    when: not accountmaster.stat.exists
+
+  - name: download & decompression accountmaster package
+    shell: |
+      basedir="/datayes/invest-platform"
+      [ -d $basedir ] || mkdir -p $basedir
+      cd $basedir
+      [ -f pms-{{version}}-database.tar.gz ] || wget {{deburl}}
+      [ -d database ] && rm -rf database
+      tar -zxf pms-{{version}}-database.tar.gz
+
+  - name: create database accountmaster
+    shell: |
+      cd /datayes/invest-platform/database
+      ./refresh_db.sh -u {{accountmaster.get('user')}} -p '{{accountmaster.get("pass")}}' accountmaster
+    when: not accountmaster.stat.exists
+
+  - name: backup database accountmaster
+    shell: |
+      bakfile={{bakdir}}/bak.$(date +%Y%m%d).sql.gz
+      mysqldump -u{{accountmaster.get('user')}} -p{{accountmaster.get('pass')}} -h{{accountmaster.get('host')}} accountmaster | gzip > $bakfile
+    when: accountmaster.stat.exists
+
+
+  - name: update database accountmaster
+    shell: |
+      basedir="/datayes/invest-platform"
+      [ -d $basedir ] || mkdir -p $basedir
+      cd $basedir
+      [ -f pms-{{version}}-database.tar.gz ] || wget {{deburl}}
+      [ -d database ] && rm -rf database
+      tar -zxf pms-{{version}}-database.tar.gz
+      cd database
+      echo ok
+    when: accountmaster.stat.exists

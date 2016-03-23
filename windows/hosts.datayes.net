@@ -16,6 +16,10 @@ dc.realtest.datayes.net
 dc.capstone-invest.datayes.net
 dc.genus-financial.datayes.net
 dc.xyfunds.datayes.net
+dc.jstex.datayes.net
+
+[gateway]
+gateway.jstex.datayes.net
 
 [all:vars]
 ansible_connection=winrm 

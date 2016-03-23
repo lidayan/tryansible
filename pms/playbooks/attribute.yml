@@ -1,0 +1,86 @@
+---
+
+- name: install or update attribution
+  hosts: all
+
+  vars:
+    version: "{{attrversion}}"
+    aft_com: artifactory.wmcloud.com
+    aft_net: artifactory.datayes.net
+    deburl: http://{{aft_net if ansible_fqdn.lower().endswith('.net') else aft_com}}/artifactory/invest-platform-release/com/datayes/attribution/{{version}}/attribution-{{version}}.deb
+
+  tasks:
+  - name: state for attr
+    stat: 
+      path: /etc/init.d/pms_attr
+    register: attr_service
+
+  - name: stop attr service
+    shell:
+      service pms_celery stop
+      service pms_attr stop
+    when: attr_service.stat.exists
+
+  - name: install apt-packages
+    apt:
+      name: [mysql, unzip, rabbitmq-server]
+    when: not attr_service.stat.exists
+
+  - file:
+      dest: /usr/lib/libmysqlclient.so.18
+      src: /opt/mysql/server-5.6/lib/libmysqlclient.so.18
+      state: link
+
+  - name: useradd pms
+    user:
+      name: pms
+      password: datayes@123
+      shell: /bin/bash
+      createhome: yes
+    when: not attr_service.stat.exists
+
+  - name: sudoer.d for pms
+    copy:
+      dest: /etc/sudoers.d/pms
+      src: ../files/pms
+    when: not attr_service.stat.exists
+
+  - name: download & install attr deb
+    shell: |
+      basedir="/datayes/invest-platform"
+      [ -d $basedir ] || mkdir -p $basedir
+      cd $basedir
+      if [ -d ${basedir}/attribution ];then
+        bakfile=bak.$(date +%Y%m%d).attr.tar.gz
+        tar -czf ../$bakfile attribution* /etc/init.d/pms_* --exclude pms/log*.log
+      fi
+      [ -f attribution-{{version}}.deb ] || wget {{deburl}}
+      dpkg -l | grep attribution | grep {{version}}
+      [ $? -eq 0 ] || dpkg -i attribution-{{version}}.deb
+
+      tar -zxvf attribution/attribution-{{version}}.tar.gz -C attribution/lib/
+      chown -R pms:pms attribution
+
+
+  - name: render template to config.cfg
+    template:
+      src: ../templates/config.cfg.tpl 
+      dest: /datayes/invest-platform/attribution/etc/config.cfg
+      owner: pms
+      group: pms
+      mode: 0644
+
+  - name: copy logging.cfg to logging.cfg
+    copy:
+      src: ../files/logging.cfg
+      dest: /datayes/invest-platform/attribution/etc/logging.cfg
+      owner: pms
+      group: pms
+      mode: 0644
+
+
+  - name: start attr service
+    service: name={{ item }} state=started
+    with_items:
+      - pms_celery
+      - pms_attr

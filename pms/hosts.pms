@@ -1,8 +1,8 @@
 
-test  ansible_host=192.168.91.129 ansible_user=root ansible_ssh_pass="123456"
+pms01.test ansible_host=buildmaster02-dev.datayes.com
 
 #################### pms qa ###################
-[qa]
+[qa-common]
 pms01.wmcloud-qa.com
 account01.wmcloud-qa.com
 
@@ -11,6 +11,11 @@ account01.wmcloud-qa.com
 [stg-common]
 invest01.cloud-stg.datayes.com
 invest01-db.cloud-stg.datayes.com
+tiger04.cloud-stg.datayes.com
+mq04.cloud-stg.datayes.com
+#fixgateway04.cloud-stg.datayes.com
+#connector04.cloud-stg.datayes.com
+
 
 [stg-uqer]
 pms01.uqer.wmcloud-stg.com
@@ -98,4 +103,11 @@ attribute01.capstone-invest.datayes.net ansible_host=attribution01.capstone-inve
 pms01.genus-financial.datayes.net
 account01.genus-financial.datayes.net
 attribute01.genus-financial.datayes.net
+
+[prd-jstex]
+pms01.jstex.datayes.net
+account01.jstex.datayes.net
+attribute01.jstex.datayes.net
+gw.jstex.datayes.net
+tiger01.jstex.datayes.net
 

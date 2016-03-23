@@ -17,8 +17,11 @@ if [ $? -ne 0 ]; then
     cp /datayes/invest-platform/pms/web/pms* $bakdir
 fi
 
-
-hostname="account01"
+if [ $1 ];then
+    hostname="$1"
+else
+    hostname="account01"
+fi
 username="app_platform"
 password="We1come"
 database="accountmaster"

@@ -1,0 +1,42 @@
+---
+
+accountmaster: 
+  host: account01.wmcloud-qa.com
+  port: 3306
+  user: app_platform
+  pass: We1come
+
+datayesdb:
+  host: real-prd03.datayes.com
+  port: 3313
+  user: app_pms_ro
+  pass: Welcome2014_0826
+
+trading:  
+  sailfish: false
+  enabled: true
+  client: datayes
+  host : tiger01.wmcloud-qa.com
+  port: 3336
+  user: app.trade@datayes.com
+  token: a85a386089ca9b5aaa3a9cbefdd4de5f2efe636a76fbec1888668a2d0f899a9f
+  trader: peng.zhang@datayes.com
+
+dataapi:
+  host: http://vip.newapi.wmcloud-stg.com/v1/api
+  token: no_token
+
+mdl:
+  host: feeder01.cloud-stg.datayes.com
+  port: 9379
+  token: no_token
+
+attribution: http://localhost:9090
+usermaster: http://usermaster.wmcloud-stg.com
+
+web_url:
+  pms: https://gw.wmcloud-stg.com/pms_qa
+  f2e: https://achilles.wmcloud-stg.com
+  gw_wmcloud: https://gw.wmcloud-stg.com
+  app_wmcloud: https://app.wmcloud-stg.com
+  compliance: http://tiger01.wmcloud-qa.com:9000/compliance
