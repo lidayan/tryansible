@@ -1,108 +1,145 @@
 
-pms01.test ansible_host=buildmaster02-dev.datayes.com
+[dev]
+pms01.wmcloud-dev.com                       ansible_host=buildmaster02-dev.datayes.com
+attribute01.wmcloud-dev.com                 ansible_host=buildmaster02-dev.datayes.com
+account01.wmcloud-dev.com                   ansible_host=buildmaster02-dev.datayes.com
+
+
 
 #################### pms qa ###################
 [qa-common]
 pms01.wmcloud-qa.com
 account01.wmcloud-qa.com
+account02.wmcloud-qa.com
+
 
 
 #################### pms stg ###################
 [stg-common]
-invest01.cloud-stg.datayes.com
-invest01-db.cloud-stg.datayes.com
+pms01.wmcloud-stg.com                       ansible_host=invest01.cloud-stg.datayes.com
+account01.wmcloud-stg.com                   ansible_host=invest01-db.cloud-stg.datayes.com
+
 tiger04.cloud-stg.datayes.com
 mq04.cloud-stg.datayes.com
-#fixgateway04.cloud-stg.datayes.com
-#connector04.cloud-stg.datayes.com
 
 
 [stg-uqer]
 pms01.uqer.wmcloud-stg.com
-account01.uqer.wmcloud-stg.com      ansible_host=accountmaster01.uqer.wmcloud-stg.com
+account01.uqer.wmcloud-stg.com              ansible_host=accountmaster01.uqer.wmcloud-stg.com
 attribute01.uqer.wmcloud-stg.com
 
+
 [stg-mom]
-app01.mp.wmcloud-stg.com
-app02.mp.wmcloud-stg.com
-db01.mp.wmcloud-stg.com
+pms01.mp.wmcloud-stg.com                    ansible_host=app01.mp.wmcloud-stg.com
+account01.mp.wmcloud-stg.com                ansible_host=db01.mp.wmcloud-stg.com
+
 mompmslb01.mp.wmcloud-stg.com
+app02.mp.wmcloud-stg.com
+
 
 [stg-zs]
-pms01.zs.org        ansible_host=10.22.220.210
-account01.zs.org    ansible_host=10.22.220.220
+pms01.zs.org                                ansible_host=10.22.220.210
+account01.zs.org                            ansible_host=10.22.220.220
+
 
 
 #################### pms prd ###################
 [prd-mom]
+pms01.mp.wmcloud.com                        ansible_host=app03.mp.wmcloud.com
+account01.mp.wmcloud.com                    ansible_host=db01.mp.wmcloud.com
+
+mompmslb01.mp.wmcloud.com
 app01.mp.wmcloud.com
 app02.mp.wmcloud.com
-app03.mp.wmcloud.com
-mompmslb01.mp.wmcloud.com
+
 
 [prd-idataq]
 pms01.idataq.wmcloud.com
-#account01.idataq.wmcloud.com
+account01.idataq.wmcloud.com
+
+tiger02.idataq.wmcloud.com
+gw.idataq.wmcloud.com
+
 
 [prd-uqer]
 pms01.uqer.wmcloud.com
 account01.uqer.wmcloud.com
 
+
 [prd-xy-inv]
 pms01.xy-inv.wmcloud.com
 account01.xy-inv.wmcloud.com
+
 
 [prd-djs]
 pms01.djs.wmcloud.com
 account01.djs.wmcloud.com
 
+
 [prd-qyinvest]
 pms01.qyinvest.wmcloud.com
 account01.qyinvest.wmcloud.com
 
-[prd-leitoncapital]
+
+[prd-leitoncapital-1]
 pms01.leitoncapital.wmcloud.com
 account01.leitoncapital.wmcloud.com
 attribute01.leitoncapital.wmcloud.com
 
+
+[prd-leitoncapital-2]
 pms02.leitoncapital.wmcloud.com
 account02.leitoncapital.wmcloud.com
 attribute02.leitoncapital.wmcloud.com
 
+
+[prd-leitoncapital-3]
 pms03.leitoncapital.wmcloud.com
 account03.leitoncapital.wmcloud.com
 attribute03.leitoncapital.wmcloud.com
+
 
 [prd-quantgloballlc]
 pms01.quantgloballlc.wmcloud.com
 account01.quantgloballlc.wmcloud.com
 attribute01.quantgloballlc.wmcloud.com
 
+gw.quantgloballlc.wmcloud.com
+tiger01.quantgloballlc.wmcloud.com
+
+
 [prd-xumian]
 pms01.xumian.datayes.net
 account01.xumian.datayes.net
 
+
 [prd-maxwealthfund]
 pms01.maxwealthfund.datayes.net
 account01.maxwealthfund.datayes.net
+
 
 [prd-tsthamc]
 pms01.tsthamc.datayes.net
 account01.tsthamc.datayes.net
 attribute01.tsthamc.datayes.net
 
+
 [prd-datasset]
-pms01.datasset.datayes.net              ansible_host=10.23.40.182
+pms01.datasset.datayes.net
+tiger01.datasset.datayes.net
+
 
 [prd-capstone-invest]
 pms01.capstone-invest.datayes.net
 account01.capstone-invest.datayes.net
-attribute01.capstone-invest.datayes.net ansible_host=attribution01.capstone-invest.datayes.net
+attribute01.capstone-invest.datayes.net         ansible_host=attribution01.capstone-invest.datayes.net
+
 
 [prd-genus-financial]
 pms01.genus-financial.datayes.net
 account01.genus-financial.datayes.net
 attribute01.genus-financial.datayes.net
+
 
 [prd-jstex]
 pms01.jstex.datayes.net

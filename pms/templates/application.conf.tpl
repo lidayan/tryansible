@@ -156,7 +156,7 @@ business {
 
     scheduler {
         interval = "<1 minute><Duration>"
-        eod_delay = "<15 minute><Duration>"
+        eod_delay = "<75 minute><Duration>"
     }
 
     valuation {

@@ -1,20 +1,32 @@
 ---
 
+pmsbakdir: /datayes
+attrbakdir: /datayes
+accountbakdir: /datayes
+sailfishbakdir: /datayes
+
+pmsversion: 2.7.0-30
+attrversion: 1.4.0-4
+sailfishversion: 1.1.0-14
+
+attribution: http://localhost:9090
+usermaster: http://usermaster.wmcloud-stg.com
+
 accountmaster: 
-  host: account01.wmcloud-qa.com
+  host: buildmaster02-dev.datayes.com
   port: 3306
   user: app_platform
   pass: We1come
 
 datayesdb:
-  host: real-prd03.datayes.com
+  host: db-datayesdb.wmcloud-stg.com
   port: 3313
   user: app_pms_ro
   pass: Welcome2014_0826
 
 trading:  
-  sailfish: false
-  enabled: true
+  sailfish: "false"
+  enabled: "true"
   client: datayes
   host : tiger01.wmcloud-qa.com
   port: 3336
@@ -30,9 +42,6 @@ mdl:
   host: feeder01.cloud-stg.datayes.com
   port: 9379
   token: no_token
-
-attribution: http://localhost:9090
-usermaster: http://usermaster.wmcloud-stg.com
 
 web_url:
   pms: https://gw.wmcloud-stg.com/pms_qa

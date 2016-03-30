@@ -1,0 +1,5 @@
+---
+
+- name: test playbooks
+  hosts: all
+

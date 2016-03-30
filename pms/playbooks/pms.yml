@@ -1,44 +1,37 @@
 ---
 
 - name: install or update pms
-  hosts: all
+  hosts: pms0*
 
   vars:
-    # version: 2.6.1-35
     version: "{{pmsversion}}"
-    aft_com: artifactory.wmcloud.com
-    aft_net: artifactory.datayes.net
-    deburl: http://{{aft_net if ansible_fqdn.lower().endswith('.net') else aft_com}}/artifactory/invest-platform-release/com/datayes/pms/{{version}}/pms-{{version}}.deb
+    aft_host: "{{'artifactory.datayes.net' if ansible_fqdn.lower().endswith('.net') else 'artifactory.wmcloud.com'}}"
+    deburl: "http://{{aft_host}}/artifactory/invest-platform-release/com/datayes/pms/{{version}}/pms-{{version}}.deb"
 
   tasks:
-  - name: state for pms
-    stat: 
-      path: /etc/init.d/pms_server
-    register: pms_service
+  - name: ensure stoped pms-service
+    args:
+      executable: /bin/bash
+    shell: |
+      if [ -f /etc/init.d/pms_server ]; then
+        bash /etc/init.d/pms_server stop
+      else:
+        exit 0
+      fi
 
-  - name: stop pms service
-    service:
-      name: pms_server
-      state: stopped
+  - apt:
+      name: [authbind, unzip, openjdk-7-jdk]
 
-  - name: install apt-packages
-    apt:
-      name: [mysql, authbind, unzip, openjdk-7-jdk]
-    when: not pms_service.stat.exists
-
-  - name: useradd pms
-    user:
+  - user:
       name: pms
       password: datayes@123
       shell: /bin/bash
       createhome: yes
-    when: not pms_service.stat.exists
 
   - name: sudoer.d for pms
     copy:
       dest: /etc/sudoers.d/pms
-      src: ../files/pms
-    when: not pms_service.stat.exists
+      src: ../files/sudoer.pms
 
   - name: authbind by port 80 for pms
     file:
@@ -47,21 +40,42 @@
       mode: 0755
       owner: pms
       group: pms
-    when: not pms_service.stat.exists
 
-  - name: download & install pms deb
+  - name: authbind by add:port for pms
+    file:
+      path: /etc/authbind/byaddr/0.0.0.0:80
+      state: touch
+      mode: 0755
+      owner: pms
+      group: pms
+
+  - name: backup & download & install pms deb
     shell: |
       basedir="/datayes/invest-platform"
       [ -d $basedir ] || mkdir -p $basedir
       cd $basedir
+      ## backup
       if [ -d ${basedir}/pms ];then
-        bakfile=bak.$(date +%Y%m%d).pms.tar.gz
+        bakfile={{pmsbakdir}}/bak.$(date +%Y%m%d).pms.tar.gz
         [ -f $bakfile ] && rm $bakfile
-        tar -czf ../$bakfile pms* /etc/init.d/pms_server --exclude pms/log*.log
+        tar -czf $bakfile pms pms-*.deb /etc/init.d/pms_server --exclude *log
+        rm -rf pms-*.deb >/dev/null 2>&1
       fi
-      [ -f pms-{{version}}.deb ] || wget {{deburl}}
+      ## download 
+      wget {{deburl}}
+      if [ ! -f pms-{{version}}.deb ]; then
+        echo download package\(pms-{{version}}.deb\) failed >&2
+        exit 1
+      fi
+      ## install
       dpkg -l | grep pms | grep {{version}}
       [ $? -eq 0 ] || dpkg -i pms-{{version}}.deb
+      if [ $? -ne 0 ]; then
+        echo dpkg install package\(pms-{{version}}.deb\) failed >&2
+        exit 1
+      fi
+    register: scriptResult
+  - debug: var=scriptResult
 
   - name: render template to application.conf
     template:
@@ -71,7 +85,6 @@
       group: pms
       mode: 0644
 
-  - name: start service pms_server
-    service:
-      name: pms_server
-      state: started
+  - service: name=pms_server state=started
+
+  

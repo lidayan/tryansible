@@ -1,0 +1,32 @@
+---
+
+- name: initilize zabbix agent
+  hosts: all
+  vars:
+    ZabbixServer: "{{'mon.datayes.net' if ansible_fqdn.lower().endswith('.net') else 'mon.datayes.com'}}"
+    HeartbeatUrl: "http://localhost/heartbeat"
+    ZabbixAgentMeta: "pms"
+
+  tasks:
+  - apt:
+      name: [zabbix-agent, zabbix-sender]
+
+  - name: render zabbix_agentd.conf & zabbixsender4heartbeat.sh
+    template: src={{item.src}} dest={{item.dest}}
+    with_items:
+      - src: ../templates/zabbix_agentd.conf.tpl
+        dest: /etc/zabbix/zabbix_agentd.conf
+      - src: ../templates/zabbixsender4heartbeat.sh.tpl
+        dest: /root/zabbixsender4heartbeat.sh
+
+  - name: add task to crontab
+    shell: |
+      grep -i "/root/zabbixsender4heartbeat.sh" /var/spool/cron/crontabs/root > /dev/null
+      if [ $? -ne 0 ]; then
+        echo "1/*     *       *       *       *       /bin/bash -x /root/zabbixsender4heartbeat.sh > /tmp/heartbeat.log" >> /var/spool/cron/crontabs/root
+      fi
+
+  - name: restart zabbixagent
+    service:
+      name: zabbix-agent
+      state: restarted

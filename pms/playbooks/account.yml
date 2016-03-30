@@ -1,7 +1,23 @@
 ---
 
-- name: install or update attribution
-  hosts: all
+- name: stop pms service
+  hosts: pms0*
+  tasks:
+  - shell: |
+      if [ -f /etc/init.d/pms_server ]; then
+        bash /etc/init.d/pms_server stop
+      else
+        echo no pms service
+      fi
+    args:
+      executable: /bin/bash
+
+
+
+
+
+- name: install or update accountmaster
+  hosts: account*
 
   vars:
     version: "{{pmsversion}}"
@@ -10,62 +26,86 @@
     deburl: http://{{aft_net if ansible_fqdn.lower().endswith('.net') else aft_com}}/artifactory/invest-platform-release/com/datayes/pms/{{version}}/pms-{{version}}-database.tar.gz
 
   tasks:
-  - name: state for accountmaster
-    stat: 
-      path: /etc/init.d/mysql
-    register: accountmaster
-
   - name: install apt-packages
     apt:
-      name: [mysql, unzip]
-    when: not accountmaster.stat.exists
-
-  - service:
       name: mysql
-      state: restarted
 
-  - name: initialize mysql
+
+  - name: initialize || backup & update || create database
+    args:
+      executable: /bin/bash
     shell: |
       PATH=/opt/mysql/server-5.6/bin/:$PATH
-      mysqladmin -u root password 'root@123';
-      mysql -uroot -p'root@123' -e "
-        grant all privileges on accountmaster.* to app_platform@'{{'.'.join(facter_ipaddress.split('.')[:3])}}.%' identified by 'We1come';
-        grant all on *.* to 'changmao.wang'@'localhost' identified by 'Datayes_DBA_2014' with grant option;
-        delete from mysql.user where password='';
-        flush privileges;
-      "
-    when: not accountmaster.stat.exists
 
-  - name: download & decompression accountmaster package
-    shell: |
-      basedir="/datayes/invest-platform"
-      [ -d $basedir ] || mkdir -p $basedir
-      cd $basedir
-      [ -f pms-{{version}}-database.tar.gz ] || wget {{deburl}}
-      [ -d database ] && rm -rf database
-      tar -zxf pms-{{version}}-database.tar.gz
+      ## function for download & decompression database package
+      function downloadpackage(){
+        basedir="/datayes/invest-platform"
+        [ -d $basedir ] || mkdir -p $basedir
+        cd $basedir
+        [ -f pms-{{version}}-database.tar.gz ] || wget {{deburl}}
+        if [ ! -f pms-{{version}}-database.tar.gz ]; then 
+          echo downloadpackage failed >&2
+          exit 1
+        fi
+        tar -zxf pms-{{version}}-database.tar.gz
+      }
 
-  - name: create database accountmaster
-    shell: |
-      cd /datayes/invest-platform/database
-      ./refresh_db.sh -u {{accountmaster.get('user')}} -p '{{accountmaster.get("pass")}}' accountmaster
-    when: not accountmaster.stat.exists
+      ## function for execute sql script
+      function runsql(){
+        sqlfile=$1
+        cat $sqlfile | mysql -u{{accountmaster.user}} -p{{accountmaster.pass}} -h{{accountmaster.host}} accountmaster >../../${sqlfile}.out  2>&1
+        if [ $? -ne 0 ];then
+          echo execute $sqlfile failed >&2
+        else
+          rm -f $sqlfile
+        fi
+      }
 
-  - name: backup database accountmaster
-    shell: |
-      bakfile={{bakdir}}/bak.$(date +%Y%m%d).sql.gz
-      mysqldump -u{{accountmaster.get('user')}} -p{{accountmaster.get('pass')}} -h{{accountmaster.get('host')}} accountmaster | gzip > $bakfile
-    when: accountmaster.stat.exists
+      ## initialize & create database
+      if [ ! -d /datayes/invest-platform/database ]; then
+        echo initialized
+        /etc/init.d/mysql restart
+        mysqladmin -u root password 'root@123';
+        mysql -uroot -p'root@123' -e "
+          grant all privileges on accountmaster.* to app_platform@'%' identified by 'We1come';
+          grant all on *.* to 'changmao.wang'@'localhost' identified by 'Datayes_DBA_2014' with grant option;
+          delete from mysql.user where password='';
+          flush privileges;
+        "
+        downloadpackage
+        cd /datayes/invest-platform/database
+        ./refresh_db.sh -u {{accountmaster.user}} -p '{{accountmaster.pass}}' accountmaster 
 
-
-  - name: update database accountmaster
-    shell: |
-      basedir="/datayes/invest-platform"
-      [ -d $basedir ] || mkdir -p $basedir
-      cd $basedir
-      [ -f pms-{{version}}-database.tar.gz ] || wget {{deburl}}
-      [ -d database ] && rm -rf database
-      tar -zxf pms-{{version}}-database.tar.gz
-      cd database
-      echo ok
-    when: accountmaster.stat.exists
+      ## backup & upgrade database
+      else
+        echo update
+        cd /datayes/invest-platform
+        currVersion=$(ls pms-*-database.tar.gz | cut -d - -f 2)
+        bakfile={{accountbakdir}}/bak.$(date +%Y%m%d).account.sql.gz
+        mysqldump -u{{accountmaster.user}} -p{{accountmaster.pass}} -h{{accountmaster.host}} accountmaster 2>/dev/null | gzip > $bakfile 2>/dev/null
+        rm -rf pms-*-database.tar.gz database *.out >/dev/null 2>&1
+        downloadpackage
+        cd /datayes/invest-platform/database/upgrade
+        cv1=$(echo $currVersion | cut -d . -f 1)
+        cv2=$(echo $currVersion | cut -d . -f 2)
+        cv3=$(echo $currVersion | cut -d . -f 3)
+        filelist=$(ls | sort -n -t . -k 1,1 -k 2,2)
+        for file in $filelist; do
+          v1=$(echo $file | cut -d . -f 1)
+          v2=$(echo $file | cut -d . -f 2)
+          v3=$(echo $file | cut -d . -f 3)
+          if [[ $v1 =~ ^[0-9]*$ ]] && [[ $v2 =~ ^[0-9]*$ ]] && [[ $v3 =~ ^[0-9]*$ ]]; then
+            if [ $v1 -eq $cv1 ] && [ $v2 -eq $cv2 ] && [ $v3 -gt $cv3 ]; then
+              runsql $file
+            fi
+            if [ $v1 -eq $cv1 ] && [ $v2 -gt $cv2 ]; then
+              runsql $file
+            fi
+            if [ $v1 -gt $cv1 ]; then
+              runsql $file
+            fi
+          fi
+        done
+      fi
+    register: scriptResult
+  - debug: var=scriptResult

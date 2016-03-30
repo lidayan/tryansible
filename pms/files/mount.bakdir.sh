@@ -2,14 +2,15 @@
 
 dpkg -l | grep "cifs-utils" > /dev/null
 if [ $? -ne 0 ]; then
-    apt-get install cifs-utils
+    curl http://apt.wmcloud.com/install.sh | bash 
+    echo Y | apt-get install cifs-utils
 fi
 
 if [ -z $1 ];then
-    echo need fisrt param as sharepath 
+    echo need fisrt param as sharepath like //dc//backup/app/pms
     exit 1
 fi
-localpath=$(basename $1)
+localpath=/$(basename $1)
 sharepath="$1"
 
 [ -d $localpath ] || mkdir $localpath
