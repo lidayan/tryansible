@@ -4,10 +4,12 @@ dc.stg.wmcloud.com
 dc.xy-inv.wmcloud.com
 dc.leitoncapital.wmcloud.com
 dc.djs.wmcloud.com
-dc.qyinvest.wmcloud.com
+dc.idataq.wmcloud.com
 dc.quantgloballlc.wmcloud.com
+dc.qyinvest.wmcloud.com
 
 [gateway]
+gateway.djs.wmcloud.com
 gateway.quantgloballlc.wmcloud.com
 
 [desktop]                                                 

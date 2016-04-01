@@ -1,0 +1,15 @@
+---
+
+- name: update certificate for tsgateway
+  hosts: all
+  vars:
+    TenantName: "{{ansible_fqdn.lower().split('.')[1]}}"
+
+  tasks:
+  - win_copy:
+      src: "../files/pfx/{{TenantName}}.wmcloud.com.pfx"
+      dest: "c:/"
+
+  - win_template:
+      src: "../files/pfx/update.ps1.tpl"
+      dest: "c:/update.certificate.ps1"

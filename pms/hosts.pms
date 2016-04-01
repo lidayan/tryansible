@@ -76,15 +76,12 @@ pms01.djs.wmcloud.com
 account01.djs.wmcloud.com
 
 
-[prd-qyinvest]
-pms01.qyinvest.wmcloud.com
-account01.qyinvest.wmcloud.com
-
-
 [prd-leitoncapital-1]
 pms01.leitoncapital.wmcloud.com
 account01.leitoncapital.wmcloud.com
 attribute01.leitoncapital.wmcloud.com
+
+tiger01.leitoncapital.wmcloud.com
 
 
 [prd-leitoncapital-2]
@@ -92,11 +89,15 @@ pms02.leitoncapital.wmcloud.com
 account02.leitoncapital.wmcloud.com
 attribute02.leitoncapital.wmcloud.com
 
+tiger02.leitoncapital.wmcloud.com
+
 
 [prd-leitoncapital-3]
 pms03.leitoncapital.wmcloud.com
 account03.leitoncapital.wmcloud.com
 attribute03.leitoncapital.wmcloud.com
+
+tiger03.leitoncapital.wmcloud.com
 
 
 [prd-quantgloballlc]
@@ -112,10 +113,14 @@ tiger01.quantgloballlc.wmcloud.com
 pms01.xumian.datayes.net
 account01.xumian.datayes.net
 
+tiger01.xumian.datayes.net
+
 
 [prd-maxwealthfund]
 pms01.maxwealthfund.datayes.net
 account01.maxwealthfund.datayes.net
+
+tiger01.maxwealthfund.datayes.net
 
 
 [prd-tsthamc]
@@ -123,9 +128,16 @@ pms01.tsthamc.datayes.net
 account01.tsthamc.datayes.net
 attribute01.tsthamc.datayes.net
 
+tiger01.tsthamc.datayes.net
+
+
+[prd-realtest]
+tiger01.realtest.datayes.net
+
 
 [prd-datasset]
 pms01.datasset.datayes.net
+
 tiger01.datasset.datayes.net
 
 
@@ -134,17 +146,22 @@ pms01.capstone-invest.datayes.net
 account01.capstone-invest.datayes.net
 attribute01.capstone-invest.datayes.net         ansible_host=attribution01.capstone-invest.datayes.net
 
+tiger01.capstone-invest.datayes.net
+
 
 [prd-genus-financial]
 pms01.genus-financial.datayes.net
 account01.genus-financial.datayes.net
 attribute01.genus-financial.datayes.net
 
+tiger01.genus-financial.datayes.net
+
 
 [prd-jstex]
 pms01.jstex.datayes.net
 account01.jstex.datayes.net
 attribute01.jstex.datayes.net
+
 gw.jstex.datayes.net
 tiger01.jstex.datayes.net
 

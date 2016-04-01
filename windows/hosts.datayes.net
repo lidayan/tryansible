@@ -1,16 +1,9 @@
 
 
-[client]
-dayan.datasset.datayes.net              ansible_host=10.23.40.187
-10.23.40.135
-10.23.127.56    ansible_password="datayes@123"
-client01.capstone-invest.datayes.net    ansible_host=10.23.48.38
-
 [dc]
 dc.datasset.datayes.net
 dc.xumian.datayes.net
 dc.maxwealthfund.datayes.net
-dc.zsfund.datayes.net
 dc.tsthamc.datayes.net
 dc.realtest.datayes.net
 dc.capstone-invest.datayes.net
@@ -19,6 +12,7 @@ dc.xyfunds.datayes.net
 dc.jstex.datayes.net
 
 [gateway]
+gateway.tsthamc.datayes.net
 gateway.jstex.datayes.net
 
 [all:vars]

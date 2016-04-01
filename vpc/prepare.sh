@@ -20,30 +20,49 @@ if ping $hostname -c 2; then
 fi
 
 
-################################################# backup for quantbot
-bakdir=/datayes/bak.vpc.$(date +%Y%m%d)
+## backup for quantbot
+bakdir=/datayes
 [ -d $bakdir ] || mkdir -p $bakdir;
 
-cfgfile="/datayes/vpc-api/etc/settings.py"
-[ -f $cfgfile ] && cp $cfgfile $bakdir
-
-mv /datayes/current/vpc-*.deb $bakdir
-mv /datayes/current/vpc-client-*.zip $bakdir
+vpcbakfile=$bakdir/bak.$(date +%Y%m%d).vpc.tar.gz
+tar -zcf $vpcbakfile /datayes/vpc-* /etc/nginx/sites-enabled/vpc* /etc/uwsgi/apps-enabled/vpc-api.ini --exclude *.log
 
 username="vpc"
 password="vpc"
-hostname="db01"
 database="vpc"
+hostname="db01"
+vpcbaksql=$bakdir/bak.$(date +%Y%m%d).vpc.sql.gz
 if ping $hostname -c 2; then
-    mysqldump -u$username -p$password -h$hostname $database > $bakdir/vpc.sql
+    mysqldump -u$username -p$password -h$hostname $database | gzip > $qbtbaksql
 fi
 
 
-################################################# download pakcages
+qbtbakfile=$bakdir/bak.$(date +%Y%m%d).qbt.tar.gz
+tar -zcf $qbtbakfile /datayes/quantbot-* /etc/nginx/sites-enabled/quantbot* /etc/uwsgi/apps-enabled/quantbot-api.ini --exclude *.log
+
+username="quantbot"
+password="quantbot"
+database="quantbot"
+hostname="db01"
+qbtbaksql=$bakdir/bak.$(date +%Y%m%d).qbt.sql.gz
+if ping $hostname -c 2; then
+    mysqldump -u$username -p$password -h$hostname $database | gzip > $qbtbaksql
+fi
+
+
+
+## download pakcages
 cd /datayes/current
-wget http://artifactory.wmcloud.com/artifactory/f2e-release/com/datayes/vpc-biz/1.16.0-1/vpc-biz-1.16.0-1.deb
-wget http://artifactory.wmcloud.com/artifactory/vpc-release/com/datayes/vpc-api/1.16.0-74/vpc-api-1.16.0-74.deb
-wget http://artifactory.wmcloud.com/artifactory/vpc-release/com/datayes/vpc-client/1.16.0-2/vpc-client-1.16.0-2-pro.zip 
-wget http://artifactory.wmcloud.com/artifactory/quantbot-release/com/datayes/quantbot-api/1.14.0-8/quantbot-api-1.14.0-8.deb
-wget http://artifactory.wmcloud.com/artifactory/f2e-release/com/datayes/quantbot-biz/1.14.0-25/quantbot-biz-1.14.0-25.deb
+
+vpc_biz_version="1.16.0-1"
+vpc_api_version="1.16.0-1"
+vpc_agt_version="1.16.0-1"
+wget http://artifactory.wmcloud.com/artifactory/f2e-release/com/datayes/vpc-biz/${vpc_biz_version}/vpc-biz-${vpc_biz_version}.deb
+wget http://artifactory.wmcloud.com/artifactory/vpc-release/com/datayes/vpc-api/${vpc_api_version}/vpc-api-${vpc_api_version}.deb
+wget http://artifactory.wmcloud.com/artifactory/vpc-release/com/datayes/vpc-client/${vpc_agt_version}/vpc-client-${vpc_agt_version}-pro.zip 
+
+qbt_biz_version="1.16.0-1"
+qbt_api_version="1.16.0-1"
+wget http://artifactory.wmcloud.com/artifactory/f2e-release/com/datayes/quantbot-biz/${qbt_biz_version}/quantbot-biz-${qbt_biz_version}.deb
+wget http://artifactory.wmcloud.com/artifactory/quantbot-release/com/datayes/quantbot-api/${bt_api_version}/quantbot-api-${bt_api_version}.deb
 
