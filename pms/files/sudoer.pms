@@ -1,1 +1,0 @@
-pms ALL=(ALL) NOPASSWD:/usr/sbin/service
