@@ -1,0 +1,9 @@
+---
+
+- name: install or update pms
+  hosts: pms0*
+
+  roles:
+  - pmsweb
+
+  

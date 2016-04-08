@@ -1,0 +1,64 @@
+#! /bin/bash
+set -e
+export PATH="/opt/anaconda/bin:$PATH"
+
+user=pinvest
+if [[ $UID -ne 0 ]];then
+   echo "only root can run the service"
+   exit 1
+fi
+
+WORKDIR=/datayes/invest-platform/pms/webpy
+LOG_DIR=$WORKDIR/logs
+
+case $1 in
+
+    start)
+        status=`ps -ef | grep webpy.xml | grep -v grep | grep -v pms_webpy | wc -l`
+        if [[ $status -gt 0 ]]; then
+            echo "pms_webpy is already started!!!"
+            exit 0
+        fi
+        /sbin/start-stop-daemon --make-pidfile -c pinvest:pinvest -d $WORKDIR --start --oknodo --pidfile /var/run/pms_webpy.pid --background --verbose --exec /bin/bash -- -c "uwsgi -x etc/webpy.xml"
+        sleep 1
+        status=`ps -ef | grep webpy.xml | grep -v grep | grep -v pms_webpy | wc -l`
+        if [[ $status -gt 0 ]]; then
+            echo "start success"
+            exit 0
+        fi
+        echo "start error"
+        exit 1
+        ;;
+
+    stop)
+        status=`ps -ef | grep webpy.xml | grep -v grep | grep -v pms_webpy | wc -l`
+        if [[ $status -eq 0 ]]; then
+            echo "pms_webpy is already stopped"
+            exit 0
+        fi
+        ps -ef | grep webpy.xml | grep -v grep | awk '{print $2}' | xargs kill -9
+        sleep 1
+        status=`ps -ef | grep webpy.xml | grep -v grep | grep -v pms_webpy | wc -l`
+        if [[ $status -eq 0 ]]; then
+            echo "stop success"
+            exit 0
+        fi
+        echo "stop error"
+        exit 1
+        ;;
+
+    status)
+        status=`ps -ef | grep webpy.xml | grep -v grep | grep -v pms_webpy | wc -l`
+        if [[ $status -eq 0 ]]; then
+            echo "not running"
+            exit 1
+        else
+            echo "is running"
+            exit 0
+        fi
+        ;;
+
+    *)
+        echo "Usage: /etc/init.d/pms_webpy {start|stop|status}" || true
+        exit 1
+esac

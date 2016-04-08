@@ -1,0 +1,81 @@
+---
+# tasks file for pmsweb
+- assert:
+    that:
+    - pmsversion is defined
+    - pmsbakdir is defined
+
+- service:
+    name: pms_server
+    status: stoped
+  ignore_errors: yes
+
+- apt:
+    name: [authbind, unzip, openjdk-7-jdk]
+
+- include: user.pms.yml
+
+- name: authbind by port 80 for pms
+  file:
+    path: "{{item}}"
+    state: touch
+    mode: 0755
+    owner: pms
+    group: pms
+  with_items:
+  - /etc/authbind/byport/80
+  - /etc/authbind/byaddr/0.0.0.0:80
+
+- file:
+    path: "{{item}}"
+    state: directory
+  with_items:
+  - "{{basedir}}"
+  - "{{pmsbakdir}}"
+
+- name: backup & download & install pms deb
+  args:
+    executable: /bin/bash
+    chdir: "{{basedir}}"
+  shell: |
+    ## backup
+    bakfile={{pmsbakdir}}/bak.$(date +%Y%m%d).pms.tar.gz
+    if [ -d pms ] && [ ! -f $bakfile ]; then
+      tar -czf $bakfile pms pms-*.deb /etc/init.d/pms_server --exclude *log >/dev/null 2>&1
+    fi
+    ## download 
+    rm -rf pms-*.deb >/dev/null 2>&1
+    wget {{pkgurl}} > /dev/null 2>&1
+    if [ ! -f {{pkgname}} ]; then
+      echo download package\({{pkgname}}\) failed >&2
+      exit 1
+    fi
+    ## install
+    if dpkg -l | grep pms | grep {{version}} || dpkg -i {{pkgname}} ; then
+      echo dpkg install package\({{pkgname}}\) successfully
+    else 
+      echo dpkg install package\({{pkgname}}\) failed >&2
+      exit 1
+    fi
+  register: script_result
+  failed_when: script_result.rc > 0
+  ignore_errors: true
+- fail:
+    msg: "{{script_result.stderr}}"
+  when: script_result | failed
+
+- template:
+    src: pms.application.conf.tpl 
+    dest: "{{basedir}}/pms/etc/application.conf"
+    owner: pms
+    group: pms
+    mode: 0644
+
+- copy:
+    src: pms_server
+    dest: /etc/init.d/
+    mode: 0755
+
+- service: 
+    name: pms_server 
+    state: started

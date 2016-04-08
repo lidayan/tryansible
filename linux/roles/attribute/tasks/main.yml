@@ -1,0 +1,101 @@
+---
+# tasks file for attribute
+
+- assert:
+    that:
+    - attrversion is defined
+    - attrbakdir is defined
+
+- service: 
+    name: "{{item}}" 
+    state: stopped
+  with_items:
+    - zabbix-agent
+    - pms_celery
+    - pms_attr
+  ignore_errors: yes
+
+- apt:
+    name: [mysql, unzip, rabbitmq-server]
+
+- file:
+    dest: /usr/lib/libmysqlclient.so.18
+    src: /opt/mysql/server-5.6/lib/libmysqlclient.so.18
+    state: link
+
+- include: user.pms.yml
+
+- file:
+    path: "{{item}}"
+    state: directory
+  with_items:
+  - "{{basedir}}"
+  - "{{attrbakdir}}"
+
+- name: initialize/backup & update/create  for attribution
+  args:
+    executable: /bin/bash
+    chdir: "{{basedir}}"
+  shell: |
+    ## initialize or backup
+    bakfile={{attrbakdir}}/bak.$(date +%Y%m%d).attr.tar.gz
+    if [ ! -d attribution ];then
+      rabbitmqctl add_user pms datayes123
+      rabbitmqctl add_vhost attribution
+      rabbitmqctl set_permissions -p attribution pms ".*" ".*" ".*"
+    elif [ ! -f $bakfile ]; then
+      tar -czf $bakfile attribution* /etc/init.d/pms_attr /etc/init.d/pms_celery --exclude *log >/dev/null 2>&1
+    fi
+    ## download 
+    rm -rf attribution-*.deb >/dev/null 2>&1
+    wget {{pkgurl}} > /dev/null
+    if [ ! -f {{pkgname}} ]; then
+      echo download package failed >&2
+      exit 1
+    fi
+    ## install
+    if dpkg -l | grep attribution | grep {{version}} || dpkg -i {{pkgname}}; then
+      echo install package successfully
+      exit 0
+    else
+      echo error in installing package >&2
+      exit 1
+    fi
+  register: script_result
+  failed_when: script_result.rc > 0
+  ignore_errors: true
+- fail:
+    msg: "{{script_result.stderr}}"
+  when: script_result | failed
+
+- name: render template to config.cfg
+  template:
+    src: config.cfg.tpl 
+    dest: /datayes/invest-platform/attribution/etc/config.cfg
+    owner: pms
+    group: pms
+    mode: 0644
+
+- copy:
+    src: logging.cfg
+    dest: /datayes/invest-platform/attribution/etc/logging.cfg
+    owner: pms
+    group: pms
+    mode: 0644
+
+- copy:
+    src: "{{item}}"
+    dest: /etc/init.d/
+    mode: 0755
+  with_items:
+  - pms_celery
+  - pms_attr
+
+
+- service: 
+    name: "{{item}}" 
+    state: started
+  with_items:
+    - pms_celery
+    - pms_attr
+    - zabbix-agent

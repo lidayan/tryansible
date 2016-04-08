@@ -33,7 +33,7 @@ database="vpc"
 hostname="db01"
 vpcbaksql=$bakdir/bak.$(date +%Y%m%d).vpc.sql.gz
 if ping $hostname -c 2; then
-    mysqldump -u$username -p$password -h$hostname $database | gzip > $qbtbaksql
+    /opt/mysql/server-5.6/bin/mysqldump -u$username -p$password -h$hostname $database | gzip > $vpcbaksql
 fi
 
 
@@ -46,23 +46,24 @@ database="quantbot"
 hostname="db01"
 qbtbaksql=$bakdir/bak.$(date +%Y%m%d).qbt.sql.gz
 if ping $hostname -c 2; then
-    mysqldump -u$username -p$password -h$hostname $database | gzip > $qbtbaksql
+    /opt/mysql/server-5.6/bin/mysqldump -u$username -p$password -h$hostname $database | gzip > $qbtbaksql
 fi
 
 
 
 ## download pakcages
 cd /datayes/current
+rm /datayes/current/*.*
 
-vpc_biz_version="1.16.0-1"
-vpc_api_version="1.16.0-1"
-vpc_agt_version="1.16.0-1"
+vpc_biz_version="1.17.0-3"
+vpc_api_version="1.17.0-25"
+#vpc_agt_version="1.16.0-1"
 wget http://artifactory.wmcloud.com/artifactory/f2e-release/com/datayes/vpc-biz/${vpc_biz_version}/vpc-biz-${vpc_biz_version}.deb
 wget http://artifactory.wmcloud.com/artifactory/vpc-release/com/datayes/vpc-api/${vpc_api_version}/vpc-api-${vpc_api_version}.deb
-wget http://artifactory.wmcloud.com/artifactory/vpc-release/com/datayes/vpc-client/${vpc_agt_version}/vpc-client-${vpc_agt_version}-pro.zip 
+#wget http://artifactory.wmcloud.com/artifactory/vpc-release/com/datayes/vpc-client/${vpc_agt_version}/vpc-client-${vpc_agt_version}-pro.zip 
 
-qbt_biz_version="1.16.0-1"
-qbt_api_version="1.16.0-1"
-wget http://artifactory.wmcloud.com/artifactory/f2e-release/com/datayes/quantbot-biz/${qbt_biz_version}/quantbot-biz-${qbt_biz_version}.deb
-wget http://artifactory.wmcloud.com/artifactory/quantbot-release/com/datayes/quantbot-api/${bt_api_version}/quantbot-api-${bt_api_version}.deb
+qbt_biz_version="1.15.0-4"
+qbt_api_version="1.15.0-2"
+wget http://artifactory.wmcloud.com/artifactory/quantbot-release/com/datayes/quantbot-biz/${qbt_biz_version}/quantbot-biz-${qbt_biz_version}.deb
+wget http://artifactory.wmcloud.com/artifactory/quantbot-release/com/datayes/quantbot-api/${qbt_api_version}/quantbot-api-${qbt_api_version}.deb
 

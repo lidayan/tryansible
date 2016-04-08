@@ -1,0 +1,9 @@
+---
+# defaults file for pmsweb
+
+basedir: /datayes/invest-platform
+
+
+ZabbixServer: "{{'mon.datayes.net' if ansible_fqdn.lower().endswith('.net') else 'mon.datayes.com'}}"
+HeartbeatUrl: "http://localhost/heartbeat"
+ZabbixAgentMeta: "pms"

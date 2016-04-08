@@ -1,0 +1,8 @@
+---
+# vars file for pmsweb
+
+version: "{{pmsversion}}"
+pkgname: "pms-{{version}}.deb"
+aft_path: "/artifactory/invest-platform-release/com/datayes/pms"
+aft_host: "{{'artifactory.datayes.net' if ansible_fqdn.lower().endswith('.net') else 'artifactory.wmcloud.com'}}"
+pkgurl: "http://{{aft_host}}{{aft_path}}/{{version}}/{{pkgname}}"

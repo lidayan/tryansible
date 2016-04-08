@@ -1,0 +1,49 @@
+---
+
+pmsbakdir: /pms
+attrbakdir: /pms
+accountbakdir: /pms
+
+pmsversion: 2.7.0-30
+attrversion: 1.4.0-6
+
+attribution: http://127.0.0.1:9090
+usermaster: http://gw.idataq.wmcloud.com:8080/usermaster
+
+accountmaster: 
+  host: account01.idataq.wmcloud.com
+  port: 3306
+  user: app_platform
+  pass: We1come
+
+datayesdb:
+  host: real-prd03.datayes.com
+  port: 3313
+  user: app_pms_ro
+  pass: Welcome2014_0826
+
+trading:  
+  sailfish: "false"
+  enabled: "true"
+  client: idataq
+  host : tiger02.idataq.wmcloud.com
+  port: 3336
+  user: sys_trade@idataq.com
+  token: ae0ed68083d8abf084d6fd742e4a6ab71a6bf18906f3f952b9c7b1b2298b0500
+  trader: sys_trade@idataq.com
+
+mdl:
+  host: feeder01.cloud-data.datayes.com
+  port: 9379
+  token: no_token
+
+dataapi:
+  host: http://vip.newapi.wmcloud.com/v1/api
+  token: no_token
+
+web_url:
+  pms: http://gw.idataq.wmcloud.com/pms/
+  f2e: http://achilles.wmcloud.com
+  gw_wmcloud: http://gw.idataq.wmcloud.com
+  app_wmcloud: http://app.idataq.wmcloud.com
+  compliance: http://tiger02.idataq.wmcloud.com:9000/compliance

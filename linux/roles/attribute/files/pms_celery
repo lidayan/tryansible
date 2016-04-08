@@ -1,0 +1,66 @@
+#! /bin/bash
+set -e
+export PATH="/opt/anaconda/bin:$PATH"
+
+user=pms
+if [[ $UID -ne 0 ]];then
+    echo "only root can run the service"
+    exit 1
+fi
+
+TOPDIR=/datayes/invest-platform
+WORKDIR=$TOPDIR/attribution
+LOG_DIR=$WORKDIR/logs
+
+case $1 in
+    start)
+        status=`ps -ef | grep celery | grep -v grep | grep -v pms_celery | wc -l`
+        if [[ $status -gt 0 ]]; then
+            echo 'already running'
+            exit 0
+        fi
+        /sbin/start-stop-daemon --oknodo --background --verbose -c $user:$user -d $WORKDIR \
+            --start --make-pidfile --pidfile /var/run/pms_celery.pid \
+            --exec /bin/bash -- -c "nohup celery worker --workdir=lib/ --app=datayes.celeryapp.app > $LOG_DIR/celery.log 2>&1"
+        sleep 2
+        status=`ps -ef | grep celery | grep -v grep | grep -v pms_celery | wc -l`
+        if [[ $status -gt 0 ]]; then
+            echo 'celery start successfully!!!'
+            exit 0
+        fi
+        echo "celery is something wrong!!! "
+        exit 1
+        ;;
+
+    stop)
+        status=`ps -ef | grep celery | grep -v grep | grep -v pms_celery | wc -l`
+        if [[ $status -eq 0 ]]; then
+            echo "is already stopped"
+            exit 0
+        fi
+        pkill celery
+        sleep 2
+        status=`ps -ef | grep celery | grep -v grep | grep -v pms_celery | wc -l`
+        if [[ $status -eq 0 ]]; then
+            echo "is stopped"
+            exit 0
+        fi
+        echo 'stop error !!!'
+        exit 1
+        ;;
+
+    status)
+        ps -ef | grep celery | grep -v grep | grep -v pms_celery
+        if [ $? -eq 0 ]; then
+            echo 'is running'
+            exit 0
+        else
+            echo 'is not running'
+            exit 1
+        fi
+        ;;
+
+    *)
+        echo "Usage: /etc/init.d/pms_celery {start|stop|status}" || true
+        exit 1
+esac

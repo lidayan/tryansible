@@ -1,0 +1,92 @@
+---
+# tasks file for account
+
+- assert:
+    that:
+    - pmsversion is defined
+    - accountbakdir is defined
+
+- service:
+    name: pms_server
+    state: stoped
+  delegate_to: "pms0{{ansible_fqdn.split('0')[1]}}"
+
+- include: init.mysql.yml
+
+- file:
+    path: "{{item}}"
+    state: directory
+  with_items:
+  - "{{basedir}}"
+  - "{{accountbakdir}}"
+
+- name: initialize || backup & update || create database
+  args:
+    executable: /bin/bash
+    chdir: "{{basedir}}"
+  shell: |
+    PATH=/opt/mysql/server-5.6/bin/:$PATH
+
+    ## function for execute sql script
+    function runsql(){
+      sqlfile=$1
+      cat $sqlfile | mysql -u{{accountmaster.user}} -p{{accountmaster.pass}} -h{{accountmaster.host}} accountmaster >../../${sqlfile}.out  2>&1
+      if [ $? -ne 0 ];then
+        echo execute $sqlfile failed >&2
+        exit 1
+      else
+        rm -f $sqlfile
+      fi
+    }
+
+    # backup 
+    if [ -d database ]; then
+      currVersion=$(ls pms-*-database.tar.gz | cut -d - -f 2)
+      bakfile={{accountbakdir}}/bak.$(date +%Y%m%d).account.sql.gz
+      mysqldump -u{{accountmaster.user}} -p{{accountmaster.pass}} -h{{accountmaster.host}} accountmaster 2>/dev/null | gzip > $bakfile 2>/dev/null
+      rm -rf pms-*-database.tar.gz database *.out >/dev/null 2>&1
+    fi
+
+    # download
+    rm {{pkgname}}
+    wget {{pkgurl}}
+    if [ ! -f {{pkgname}} ]; then 
+      echo downloadpackage failed >&2
+      exit 1
+    fi
+
+    ## create or update
+    if [ ! -d database ]; then
+      tar -zxf {{pkgname}}
+      cd database
+      ./refresh_db.sh -u {{accountmaster.user}} -p '{{accountmaster.pass}}' -h '{{accountmaster.host}}' accountmaster 
+    else
+      tar -zxf {{pkgname}}
+      cd database/upgrade
+      cv1=$(echo $currVersion | cut -d . -f 1)
+      cv2=$(echo $currVersion | cut -d . -f 2)
+      cv3=$(echo $currVersion | cut -d . -f 3)
+      filelist=$(ls | sort -n -t . -k 1,1 -k 2,2)
+      for file in $filelist; do
+        v1=$(echo $file | cut -d . -f 1)
+        v2=$(echo $file | cut -d . -f 2)
+        v3=$(echo $file | cut -d . -f 3)
+        if [[ $v1 =~ ^[0-9]*$ ]] && [[ $v2 =~ ^[0-9]*$ ]] && [[ $v3 =~ ^[0-9]*$ ]]; then
+          if [ $v1 -eq $cv1 ] && [ $v2 -eq $cv2 ] && [ $v3 -gt $cv3 ]; then
+            runsql $file
+          fi
+          if [ $v1 -eq $cv1 ] && [ $v2 -gt $cv2 ]; then
+            runsql $file
+          fi
+          if [ $v1 -gt $cv1 ]; then
+            runsql $file
+          fi
+        fi
+      done
+    fi
+  register: script_sesult
+  ignore_errors: yes
+  failed_when: script_sesult.rc > 0
+- debug: var=script_sesult
+- fail: msg={{script_sesult.stderr}}
+  when: script_sesult | failed

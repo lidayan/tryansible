@@ -1,0 +1,12 @@
+---
+
+- hosts: all
+
+  tasks:
+  - cron:
+      name: test
+      job: "echo okasdf"
+      minute: "*/1"   
+
+
+  - debug: var=hostvars[inventory_hostname]

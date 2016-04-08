@@ -1,0 +1,7 @@
+---
+
+- name: initilized for sailfish
+  hosts: pms0*
+
+  roles:
+  - sailfish

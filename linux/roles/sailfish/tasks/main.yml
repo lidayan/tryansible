@@ -1,0 +1,60 @@
+---
+# tasks file for sailfish
+
+- service:
+    name: sailfish
+    status: stoped
+  ignore_errors: yes
+
+- file:
+    path: "{{basedir}}"
+    state: directory
+
+- include: user.pms.yml
+
+- synchronize:
+    src: sailfish
+    dest: "{{basedir}}/"
+    recursive: yes
+
+- file:
+    path: "{{basedir}}/sailfish"
+    state: directory
+    owner: pms
+    group: pms
+    recursive: yes
+
+- copy:
+    src: sailfish
+    dest: /etc/init.d/
+    mode: 0755
+
+- name: download & create/update sailfish
+  args:
+    executable: /bin/bash
+    chdir: "{{basedir}}"
+  shell: |
+    ## backup
+    bakfile={{sailfishbakdir}}/bak.$(date +%Y%m%d).sailfish.tar.gz
+    if [ ! -f $bakfile ]; then
+      tar -czf $bakfile sailfish /etc/init.d/sailfish --exclude *log >/dev/null 2>&1
+    fi
+    ## download
+    cd sailfish/web
+    rm sailfish-*.jar
+    wget {{pkgurl}} > /dev/null
+    if [ ! -f {{pkgname}} ]; then
+      echo download error >&2
+      exit 1
+    else
+      echo download successfully
+      exit 0
+    fi
+
+- template:
+    src: sailfish.application.conf.tpl 
+    dest: /datayes/invest-platform/sailfish/etc/
+    
+- service: 
+    name: sailfish 
+    state: started

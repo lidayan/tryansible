@@ -1,0 +1,15 @@
+---
+
+
+
+- name: useradd pms
+  user:
+    name: pms
+    password: datayes@123
+    shell: /bin/bash
+    createhome: yes
+
+- name: sudoer.d for pms
+  copy:
+    dest: /etc/sudoers.d/pms
+    src: sudoer.pms

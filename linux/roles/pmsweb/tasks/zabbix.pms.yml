@@ -1,0 +1,30 @@
+---
+
+
+- apt:
+    name: [zabbix-agent, zabbix-sender]
+    update_cache: yes
+
+- name: restart zabbixagent
+  service:
+    name: zabbix-agent
+    state: stopped
+  ignore_errors: yes
+
+- name: render zabbix_agentd.conf & zabbixsender4heartbeat.sh
+  template: src={{item.src}} dest={{item.dest}}
+  with_items:
+    - src: zabbix_agentd.conf.tpl
+      dest: /etc/zabbix/zabbix_agentd.conf
+    - src: zabbixsender4heartbeat.sh.tpl
+      dest: /root/zabbixsender4heartbeat.sh
+
+- cron:
+    name: "heartbeat-sender"
+    job: "/bin/bash -x /root/zabbixsender4heartbeat.sh > /tmp/heartbeat.log"
+    minute: "*/1"
+
+- name: restart zabbixagent
+  service:
+    name: zabbix-agent
+    state: restarted

@@ -1,0 +1,8 @@
+---
+# vars file for attribute
+
+version: "{{attrversion}}"
+pkgname: "attribution-{{version}}.deb"
+aft_path: "/artifactory/invest-platform-release/com/datayes/attribution"
+aft_host: "{{'artifactory.datayes.net' if ansible_fqdn.lower().endswith('.net') else 'artifactory.wmcloud.com'}}"
+pkgurl: "http://{{aft_host}}{{aft_path}}/{{version}}/{{pkgname}}"
