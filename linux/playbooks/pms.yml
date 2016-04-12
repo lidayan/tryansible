@@ -1,0 +1,29 @@
+---
+
+
+# - name: install or update accountmaster
+#   hosts: account0*
+
+#   pre_tasks:
+#   - service:
+#       name: pms_server
+#       state: stopped
+#     delegate_to: "pms0{{ansible_fqdn.split('0')[1]}}"
+#     ignore_errors: yes
+
+#   roles:
+#   - account
+
+#   post_tasks:
+#   - service:
+#       name: pms_server
+#       state: started
+#     delegate_to: "pms0{{ansible_fqdn.split('0')[1]}}"
+#     ignore_errors: yes
+
+
+- name: install or update pmsweb
+  hosts: pms0*
+
+  roles:
+  - pmsweb

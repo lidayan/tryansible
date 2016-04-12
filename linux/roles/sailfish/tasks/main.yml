@@ -3,7 +3,7 @@
 
 - service:
     name: sailfish
-    status: stoped
+    status: stopped
   ignore_errors: yes
 
 - file:

@@ -5,34 +5,27 @@
     name: mysql
   register: init_mysql
 
-- service:
-    name: mysql
-    state: started
-  when: init_mysql | changed
-
-- mysql_db:
-    login_user: root
-    name: accountmaster.user
-    encoding: utf-8
-  when: init_mysql | changed
-
-- mysql_user:
-    login_user: root
-    user: {{accountmaster.user}}
-    password: {{accountmaster.pass}}
-    host: "{{'.'.join(ansible_fqdn.split('.')[:3])}}.%"
-    priv: accountmaster:*.*
-  when: init_mysql | changed
-
-- mysql_user:
-    login_user: root
-    user: changmao.wang
-    password: Datayes_DBA_2014
-    priv: all:*.*
-  when: init_mysql | changed
-
-- mysql_user:
-    login_user: root
-    name: root
-    password: root@123
+- block:
+  - service:
+      name: mysql
+      state: started
+  - mysql_db:
+      login_user: root
+      name: accountmaster.user
+      encoding: utf-8
+  - mysql_user:
+      login_user: root
+      user: "{{accountmaster.user}}"
+      password: "{{accountmaster.pass}}"
+      host: "{{'.'.join(ansible_fqdn.split('.')[:3])}}.%"
+      priv: accountmaster:*.*
+  - mysql_user:
+      login_user: root
+      user: changmao.wang
+      password: Datayes_DBA_2014
+      priv: all:*.*
+  - mysql_user:
+      login_user: root
+      name: root
+      password: root@123
   when: init_mysql | changed

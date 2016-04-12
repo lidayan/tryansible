@@ -6,11 +6,6 @@
     - pmsversion is defined
     - accountbakdir is defined
 
-- service:
-    name: pms_server
-    state: stoped
-  delegate_to: "pms0{{ansible_fqdn.split('0')[1]}}"
-
 - include: init.mysql.yml
 
 - file:
@@ -84,9 +79,9 @@
         fi
       done
     fi
-  register: script_sesult
+  register: script_result
   ignore_errors: yes
-  failed_when: script_sesult.rc > 0
-- debug: var=script_sesult
-- fail: msg={{script_sesult.stderr}}
-  when: script_sesult | failed
+  failed_when: script_result.rc > 0
+- debug: var=script_result
+- fail: msg={{script_result}}
+  when: script_result | failed

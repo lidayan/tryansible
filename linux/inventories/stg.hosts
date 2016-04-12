@@ -1,0 +1,27 @@
+
+[stg-common]
+pms01.wmcloud-stg.com                       ansible_host=invest01.cloud-stg.datayes.com
+account01.wmcloud-stg.com                   ansible_host=invest01-db.cloud-stg.datayes.com
+
+tiger04.cloud-stg.datayes.com
+mq04.cloud-stg.datayes.com
+
+
+[stg-uqer]
+pms01.uqer.wmcloud-stg.com
+account01.uqer.wmcloud-stg.com              ansible_host=accountmaster01.uqer.wmcloud-stg.com
+attribute01.uqer.wmcloud-stg.com
+
+
+[stg-mom]
+pms01.mp.wmcloud-stg.com                    ansible_host=app01.mp.wmcloud-stg.com
+account01.mp.wmcloud-stg.com                ansible_host=db01.mp.wmcloud-stg.com
+
+mompmslb01.mp.wmcloud-stg.com
+app02.mp.wmcloud-stg.com
+
+
+[stg-zs]
+pms01.zs.org                                ansible_host=10.22.220.210
+attribute01.zs.org                          ansible_host=10.22.220.215
+account01.zs.org                            ansible_host=10.22.220.220

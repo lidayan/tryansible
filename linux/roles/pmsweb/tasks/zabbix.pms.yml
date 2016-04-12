@@ -2,7 +2,7 @@
 
 
 - apt:
-    name: [zabbix-agent, zabbix-sender]
+    name: [zabbix-agent, zabbix-sender,jq]
     update_cache: yes
 
 - name: restart zabbixagent

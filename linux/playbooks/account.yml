@@ -1,9 +1,0 @@
----
-
-
-- name: install or update accountmaster
-  hosts: account*
-
-  roles:
-  - account
- 
