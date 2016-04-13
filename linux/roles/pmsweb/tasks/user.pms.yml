@@ -10,3 +10,15 @@
   copy:
     dest: /etc/sudoers.d/pms
     src: sudoer.pms
+    
+
+- name: authbind by port 80 for pms
+  file:
+    path: "{{item}}"
+    state: touch
+    mode: 0755
+    owner: pms
+    group: pms
+  with_items:
+  - /etc/authbind/byport/80
+  - /etc/authbind/byaddr/0.0.0.0:80

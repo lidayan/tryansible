@@ -8,7 +8,7 @@ pmsversion: 2.5.7-62
 attrversion: 1.4.0-6
 
 attribution: http://attribute01:9090
-usermaster: http://gw.zs.org:8080/
+usermaster: http://gw.zs.org:8080
 
 accountmaster: 
   host: account01

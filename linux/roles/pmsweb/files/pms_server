@@ -30,7 +30,7 @@ pidfile='/var/run/pms_server.pid'
 
 case $1 in
     start)
-        status=`ps -ef | grep -v grep | grep /datayes/invest-platform/pms/web | wc -l`
+        status=`ps -ef | grep -v "/usr/bin/authbind" | grep [/]datayes/invest-platform/pms/web | wc -l`
         if [[ $status -eq 1 ]]; then
             echo "pms_server is already running "
             exit 0
@@ -41,7 +41,7 @@ case $1 in
             --make-pidfile --pidfile $pidfile \
             --exec /bin/bash -- -c "/usr/bin/authbind --deep $startfile > /datayes/invest-platform/pms/pmslog 2>&1"
         sleep 2
-        status=`ps -ef | grep /datayes/invest-platform/pms/web | wc -l`
+        status=`ps -ef | grep -v "/usr/bin/authbind" | grep [/]datayes/invest-platform/pms/web | wc -l`
         if [[ $status -gt 0 ]]; then
             echo "start success"
             exit 0
@@ -51,13 +51,13 @@ case $1 in
         ;;
 
     stop)
-        status=`ps -ef | grep /datayes/invest-platform/pms/web | wc -l`
+        status=`ps -ef | grep -v "/usr/bin/authbind" | grep [/]datayes/invest-platform/pms/web | wc -l`
         if [[ $status -eq 0 ]]; then
             echo "pms_server is already stopped"
             exit 0
         fi
         ppid=`cat $pidfile`
-        for i in `ps -ef | grep /datayes/invest-platform/pms/web | awk '{print $2}'`; do
+        for i in `ps -ef | grep -v "/usr/bin/authbind" | grep [/]datayes/invest-platform/pms/web | awk '{print $2}'`; do
             if [[ $ppid -ne $i ]]; then
                 kill $i
             fi
@@ -66,7 +66,7 @@ case $1 in
         count=0
         while [[ $status -eq 0 || $count -le 7 ]]; do
             sleep 2
-            status=`ps -ef | grep /datayes/invest-platform/pms/web | wc -l`
+            status=`ps -ef | grep -v "/usr/bin/authbind" | grep [/]datayes/invest-platform/pms/web | wc -l`
             if [[ $status -eq 0 ]]; then
                 echo "pms_server is stopped"
                 exit 0
@@ -78,10 +78,9 @@ case $1 in
         ;;
 
     status)
-        pidinfile=`cat /var/run/pms_server.pid`
-        pidprocess=`ps -ef | grep /datayes/invest-platform/pms/web | awk '{print $2}' | sort | head -n 1`
-        if [[ $pidinfile -eq $pidprocess ]]; then
-            echo "pms_server is running, the process id is $pidinfile"
+        pidprocess=`ps -ef | grep -v "/usr/bin/authbind" | grep [/]datayes/invest-platform/pms/web | awk '{print $2}'`
+        if [[ -n $pidprocess ]]; then
+            echo "pms_server is running, the process id is $pidprocess"
             exit 0
         fi
         echo "pms_server is not running"
