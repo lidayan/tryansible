@@ -5,7 +5,7 @@ attrbakdir: /datayes
 accountbakdir: /datayes
 
 pmsversion: 2.5.7-62
-attrversion: 1.4.0-6
+attrversion: 1.4.1-8
 
 attribution: http://attribute01:9090
 usermaster: http://gw.zs.org:8080

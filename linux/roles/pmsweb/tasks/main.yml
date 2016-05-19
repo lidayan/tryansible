@@ -4,6 +4,8 @@
     that:
     - pmsversion is defined
     - pmsbakdir is defined
+    - pmslogbakdir is defined
+    - pmsversion is defined
 
 - service:
     name: pms_server
@@ -13,7 +15,9 @@
 - apt:
     name: [authbind, unzip, openjdk-7-jdk]
 
-- include: user.pms.yml
+- include: 
+  - user.pms.yml
+  - backup.pmslog.yml
 
 - file:
     path: "{{item}}"

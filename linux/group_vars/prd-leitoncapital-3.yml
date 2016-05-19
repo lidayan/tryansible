@@ -3,6 +3,7 @@
 pmsbakdir: /pms/pms03
 attrbakdir: /pms/attribute03
 accountbakdir: /pms/pms03
+pmslogbakdir: /pms/pms03/pmslog
 
 pmsversion: 2.7.0-30
 attrversion: 1.3.0-9

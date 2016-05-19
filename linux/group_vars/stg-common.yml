@@ -4,7 +4,7 @@ pmsbakdir: /db
 attrbakdir: /db
 accountbakdir: /db
 
-pmsversion: 2.7.0-30
+pmsversion: 2.7.1-51
 attrversion: 1.4.0-5
 
 attribution: http://localhost:9090

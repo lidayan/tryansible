@@ -1,0 +1,11 @@
+
+
+- file:
+    path: "{{pmslogbakdir}}"
+    state: directory
+
+- cron:
+    name: "backup pmslog"
+    job: "cp -u /datayes/invest-platform/pms/logs/* {{pmslogbakdir}}/"
+    minute: "0"
+    hour: "0"

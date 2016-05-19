@@ -1,6 +1,7 @@
 ---
 
 pmsbakdir: /datayes
+pmslogbakdir: /pms/pmslog
 attrbakdir: /datayes
 accountbakdir: /datayes
 sailfishbakdir: /datayes

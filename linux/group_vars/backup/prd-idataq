@@ -4,8 +4,8 @@ pmsbakdir: /pms
 attrbakdir: /pms
 accountbakdir: /pms
 
-pmsversion: 2.7.0-30
-attrversion: 1.4.0-6
+pmsversion: 2.7.1-52
+attrversion: 1.4.1-8
 
 attribution: http://127.0.0.1:9090
 usermaster: http://gw.idataq.wmcloud.com:8080/usermaster

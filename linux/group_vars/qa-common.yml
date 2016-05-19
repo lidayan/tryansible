@@ -1,13 +1,17 @@
 ---
 
 pmsbakdir: /datayes
+attrbakdir: /datayes
 accountbakdir: /datayes
+pmslogbakdir: /datayes/pmslog
 
-pmsversion: 2.7.0-30
-attrversion: 1.4.0-4
+pmsversion: 2.7.1-52
+attrversion: 1.4.1-8
 
 attribution: http://localhost:9090
 usermaster: http://usermaster.wmcloud-stg.com
+
+tenantdomain: datayes.com
 
 accountmaster: 
   host: account01.wmcloud-qa.com
@@ -24,12 +28,12 @@ datayesdb:
 trading:  
   sailfish: "false"
   enabled: "true"
-  client: datayes
+  client: "{{tenantdomain.split('.')[0]}}"
   host : tiger01.wmcloud-qa.com
   port: 3336
-  user: app.trade@datayes.com
+  user: app.trade@{{tenantdomain}}
   token: a85a386089ca9b5aaa3a9cbefdd4de5f2efe636a76fbec1888668a2d0f899a9f
-  trader: peng.zhang@datayes.com
+  trader: peng.zhang@{{tenantdomain}}
 
 dataapi:
   host: http://vip.newapi.wmcloud-stg.com/v1/api

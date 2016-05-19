@@ -3,8 +3,9 @@
 pmsbakdir: /pms/pms01
 attrbakdir: /pms/attribute01
 accountbakdir: /pms/pms01
+pmslogbakdir: /pms/pms01/pmslog
 
-pmsversion: 2.7.0-30
+pmsversion: 2.7.1-51
 attrversion: 1.4.0-6
 
 attribution: http://attribute01:9090

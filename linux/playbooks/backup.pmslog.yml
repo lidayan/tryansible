@@ -1,0 +1,17 @@
+---
+
+- name: backup for pmslog
+  hosts: pms0*
+
+
+  tasks:
+
+  - file:
+      path: "{{pmslogbakdir}}"
+      state: directory
+
+  - cron:
+      name: "backup pmslog"
+      job: "cp -u /datayes/invest-platform/pms/logs/* {{pmslogbakdir}}/"
+      minute: "10"
+      hour: "0"

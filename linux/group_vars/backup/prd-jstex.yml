@@ -1,14 +1,14 @@
 ---
 
-pmsbakdir: /pms/pms01
-attrbakdir: /pms/attribute01
+pmsbakdir: /pms
+attrbakdir: /pms
 accountbakdir: /db
 
-pmsversion: 2.5.4-32
-attrversion: 1.4.0-6
+pmsversion: 2.6.1-35
+attrversion: 1.3.0-9
 
 attribution: http://attribute01:9090
-usermaster: http://gw.tsthamc.datayes.net:8080/usermaster
+usermaster: http://gw.jstex.datayes.net:8080/usermaster
 
 accountmaster: 
   host: account01
@@ -25,12 +25,12 @@ datayesdb:
 trading:  
   sailfish: "false"
   enabled: "true"
-  client: tsthamc
+  client: jstex
   host : tiger01
   port: 3336
-  user: sys_trade@tsthamc.com
+  user: sys_trade@jstex.com
   token: ae0ed68083d8abf084d6fd742e4a6ab71a6bf18906f3f952b9c7b1b2298b0500
-  trader: sys_trade@tsthamc.com
+  trader: admin@jstex.com
 
 dataapi:
   host: http://newdataapi.datayes.net/v1/api
@@ -42,8 +42,8 @@ mdl:
   token: no_token
 
 web_url:
-  pms: https://gw.tsthamc.datayes.net/pms
+  pms: https://gw.jstex.datayes.net/pms
   f2e: https://achilles.wmcloud.com
-  gw_wmcloud: https://gw.tsthamc.datayes.net
-  app_wmcloud: https://app.tsthamc.datayes.net
+  gw_wmcloud: https://gw.jstex.datayes.net
+  app_wmcloud: https://app.jstex.datayes.net
   compliance: http://tiger01:9000/compliance
