@@ -1,23 +1,37 @@
 ---
 
+pmsversion: 2.7.2-99
+attrversion: 1.4.1-8
+
 pmsbakdir: /datayes
 attrbakdir: /datayes
 accountbakdir: /datayes
+
+### no pmslog backup if not defined 
 pmslogbakdir: /datayes/pmslog
 
-pmsversion: 2.7.1-52
-attrversion: 1.4.1-8
 
-attribution: http://localhost:9090
-usermaster: http://usermaster.wmcloud-stg.com
-
-tenantdomain: datayes.com
+# var s in config template
+attribution:
+  host: localhost
+  port: 9090
 
 accountmaster: 
-  host: account01.wmcloud-qa.com
+  host: localhost
   port: 3306
   user: app_platform
   pass: We1come
+
+trading: 
+  check_mac_addr: "false"
+  sailfish: "false"
+  enabled: "true"
+  client: datayes
+  host : tiger01.wmcloud-qa.com
+  port: 3336
+  user: app.trade@datayes.comm
+  token: a85a386089ca9b5aaa3a9cbefdd4de5f2efe636a76fbec1888668a2d0f899a9f
+  trader: peng.zhang@datayes.com
 
 datayesdb:
   host: db-datayesdb.wmcloud-stg.com
@@ -25,28 +39,23 @@ datayesdb:
   user: app_pms_ro
   pass: Welcome2014_0826
 
-trading:  
-  sailfish: "false"
-  enabled: "true"
-  client: "{{tenantdomain.split('.')[0]}}"
-  host : tiger01.wmcloud-qa.com
-  port: 3336
-  user: app.trade@{{tenantdomain}}
-  token: a85a386089ca9b5aaa3a9cbefdd4de5f2efe636a76fbec1888668a2d0f899a9f
-  trader: peng.zhang@{{tenantdomain}}
-
-dataapi:
-  host: http://vip.newapi.wmcloud-stg.com/v1/api
-  token: no_token
-
 mdl:
   host: feeder01.cloud-stg.datayes.com
   port: 9379
   token: no_token
 
+dataapi:
+  host: http://vip.newapi.wmcloud-stg.com/v1/api
+  token: no_token
+
+usermaster: http://usermaster.wmcloud-stg.com
+
 web_url:
   pms: https://gw.wmcloud-stg.com/pms_qa
   f2e: https://achilles.wmcloud-stg.com
-  gw_wmcloud: https://gw.wmcloud-stg.com
-  app_wmcloud: https://app.wmcloud-stg.com
-  compliance: http://tiger01.wmcloud-qa.com:9000/compliance
+  gw: https://gw.wmcloud-stg.com
+  app: https://app.wmcloud-stg.com
+  compliance: ""
+
+business:
+  order_audit_enabled: 'false'

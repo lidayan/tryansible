@@ -1,22 +1,35 @@
 ---
 
+pmsversion: 2.5.7-62
+attrversion: 1.3.0-9
+sailfishversion: 1.1.0-14
+
 pmsbakdir: /datayes
 attrbakdir: /datayes
 accountbakdir: /datayes
 sailfishbakdir: /datayes
 
-pmsversion: 2.5.7-60
-attrversion: 1.3.0-9
-sailfishversion: 1.1.0-14
 
-attribution: http://attribute01.uqer.wmcloud-stg.com:9090
-usermaster: http://usermaster.wmcloud-stg.com
+# var s in config template
+attribution:
+  host: localhost
+  port: 9090
 
 accountmaster: 
-  host: accountmaster01.uqer.wmcloud-stg.com
+  host: account01
   port: 3306
   user: app_platform
   pass: We1come
+
+trading: 
+  sailfish: "true"
+  enabled: "false"
+  client: ""
+  host : ""
+  port: 3336
+  user: ""
+  token: ""
+  trader: ""
 
 datayesdb:
   host: db-datayesdb.wmcloud-stg.com
@@ -24,28 +37,20 @@ datayesdb:
   user: app_pms_ro
   pass: Welcome2014_0826
 
-trading:  
-  sailfish: "true"
-  enabled: "false"
-  client: datayes
-  host : tiger01.uqer.wmcloud-stg.com
-  port: 3336
-  user: app.trade@datayes.com
-  token: a85a386089ca9b5aaa3a9cbefdd4de5f2efe636a76fbec1888668a2d0f899a9f
-  trader: app.trade@datayes.com
-
-dataapi:
-  host: http://vip.newapi.wmcloud-stg.com/v1/api
-  token: no_token
-
 mdl:
   host: feeder01.cloud-stg.datayes.com
   port: 9379
   token: no_token
 
+dataapi:
+  host: http://vip.newapi.wmcloud-stg.com/v1/api
+  token: no_token
+
+usermaster: http://usermaster.wmcloud-stg.com
+
 web_url:
   pms: https://gw.wmcloud-stg.com/pms_uqer
   f2e: https://achilles.wmcloud-stg.com
-  gw_wmcloud: https://gw.wmcloud-stg.com
-  app_wmcloud: https://app.wmcloud-stg.com
-  compliance: http://tiger01.uqer.wmcloud-stg.com:9000/compliance
+  gw: https://gw.wmcloud-stg.com
+  app: https://app.wmcloud-stg.com
+  compliance: ""

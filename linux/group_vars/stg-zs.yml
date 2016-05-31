@@ -1,14 +1,22 @@
 ---
 
+
+pmsversion: 2.7.3-107
+attrversion: 1.4.1-8
+
 pmsbakdir: /datayes
 attrbakdir: /datayes
 accountbakdir: /datayes
 
-pmsversion: 2.5.7-62
-attrversion: 1.4.1-8
+### no pmslog backup if not defined 
+# pmslogbakdir: /datayes
 
-attribution: http://attribute01:9090
-usermaster: http://gw.zs.org:8080
+
+
+### var s in config template
+attribution:
+  host: attribute01
+  port: 9090
 
 accountmaster: 
   host: account01
@@ -16,21 +24,22 @@ accountmaster:
   user: app_platform
   pass: We1come
 
+trading: 
+  check_mac_addr: "true"
+  sailfish: "false"
+  enabled: "true"
+  client: datayes.com
+  host : tiger01
+  port: 3336
+  user: ze.feng@datayes.com
+  token: 7aaeb8d3fd6f3017ae994b9c1d05bc9ac927369886290c353726cf81b605b81b
+  trader: sys_trade
+
 datayesdb:
   host: datayesdb.zs.org
   port: 3306
   user: app_pms_ro
   pass: Welcome2014_0826
-
-trading:  
-  sailfish: "false"
-  enabled: "true"
-  client: leitoncapital
-  host : tiger01
-  port: 3336
-  user: sys_trade@leitoncapital.com
-  token: ae0ed68083d8abf084d6fd742e4a6ab71a6bf18906f3f952b9c7b1b2298b0500
-  trader: sys_trade@leitoncapital.com
 
 mdl:
   host: feeder01.zs.org
@@ -41,9 +50,14 @@ dataapi:
   host: http://dataapi01.zs.org/v1/api
   token: no_token
 
+usermaster: http://gw.zs.org:8080
+
 web_url:
   pms: http://gw.zs.org/pms_leitoncapital/
   f2e: http://achilles.zs.org
-  gw_wmcloud: http://gw.zs.org
-  app_wmcloud: http://app.zs.org
+  gw: https://gw.zs.org
+  app: https://app.zs.org
   compliance: http://gw.zs.org/compliance_leitoncapital
+
+business:
+  order_audit_enabled: 'true'

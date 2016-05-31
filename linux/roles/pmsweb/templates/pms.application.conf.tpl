@@ -21,13 +21,14 @@ service {
     locale = "PRC"
 
     oms {
+        check_mac_addr= {{ trading.check_mac_addr | default('false') }}
         string_api {
             enabled = {{trading.enabled}}
             host = "{{trading.host}}"
             port = {{trading.port}}
             client = "{{trading.client}}"
             token = "{{trading.token}}"
-            user = "{{trading.user}}m"
+            user = "{{trading.user}}"
             trader = "{{trading.trader}}"
             isStp = true
             retry_count = -1
@@ -64,7 +65,7 @@ service {
         host = "{{mdl.host}}"
         port = "{{mdl.port}}"
         token = "no_token"
-        reconnect_try_times = 10
+        reconnect_try_times = -1
         test_mode = false
     }
 
@@ -93,8 +94,8 @@ web {
     url {
         pms = "{{web_url.pms}}"
         f2e = "{{web_url.f2e}}"
-        gw_wmcloud_host = "{{web_url.gw_wmcloud}}"
-        app_wmcloud_host = "{{web_url.app_wmcloud}}"
+        gw_wmcloud_host = "{{web_url.gw}}"
+        app_wmcloud_host = "{{web_url.app}}"
         compliance_url = "{{web_url.compliance}}"
     }
 
@@ -103,7 +104,7 @@ web {
             odbc_name = "ACCOUNT"
             timeout = "<600 second><Duration>"
             host {
-                equity = "{{attribution}}"
+                equity = "http;//{{attribution.host}}:{{attribution.port}}"
             }
         }
         timeout = "<600 second><Duration>"
@@ -141,7 +142,7 @@ heartbeat {
         timeout = "<30 second><Duration>"
     }
     attribution {
-        enabled = true
+        enabled = {{ heartbeat.attribution.enabled | default('true') }}
         timeout = "<10 second><Duration>"
     }
 }
@@ -237,6 +238,9 @@ business {
     secret_key = {
         des = "abcdefgh"
     }
+
+    order_audit_enabled = {{ business.order_audit_enabled | default('false') }}
+
 }
 
 cache {

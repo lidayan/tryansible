@@ -1,11 +1,16 @@
 ---
 # tasks file for pmsweb
+
+- local_action: stat path="files/pms-{{version}}.deb"
+  register: file_stat
+  
 - assert:
     that:
     - pmsversion is defined
     - pmsbakdir is defined
-    - pmslogbakdir is defined
     - pmsversion is defined
+    - file_stat.stat.exists
+
 
 - service:
     name: pms_server
@@ -15,9 +20,7 @@
 - apt:
     name: [authbind, unzip, openjdk-7-jdk]
 
-- include: 
-  - user.pms.yml
-  - backup.pmslog.yml
+- include: user.pms.yml
 
 - file:
     path: "{{item}}"
@@ -26,39 +29,41 @@
   - "{{basedir}}"
   - "{{pmsbakdir}}"
 
-- name: backup & download & install for pmsweb
+- name: backup
   args:
     executable: /bin/bash
     chdir: "{{basedir}}"
   shell: |
-    ## backup
     bakfile={{pmsbakdir}}/bak.$(date +%Y%m%d).pms.tar.gz
     if [ -d pms ] && [ ! -f $bakfile ]; then
       tar -czf $bakfile pms pms-*.deb /etc/init.d/pms_server --exclude *log >/dev/null 2>&1
     fi
-    ## download 
-    rm -rf pms-*.deb >/dev/null 2>&1
-    wget {{pkgurl}} > /dev/null 2>&1
-    if [ ! -f {{pkgname}} ]; then
-      echo download package\({{pkgname}}\) failed >&2
-      exit 1
-    fi
-    ## install
+
+- copy:
+    dest: "/datayes/invest-platform/pms-{{version}}.deb"
+    src: "../files/pms-{{version}}.deb"
+
+- name: install
+  args:
+    executable: /bin/bash
+    chdir: "{{basedir}}"
+  shell: |
     if dpkg -l | grep pms | grep {{version}} || dpkg -i {{pkgname}} ; then
       echo dpkg install package\({{pkgname}}\) successfully
     else 
       echo dpkg install package\({{pkgname}}\) failed >&2
       exit 1
     fi
-  register: script_result
-  failed_when: script_result.rc > 0
-  ignore_errors: true
-- fail:
-    msg: "{{script_result.stderr}}"
-  when: script_result | failed
+
+# - copy:
+#     src: "../files/pms/{{application_conf}}"
+#     dest: "{{basedir}}/pms/etc/application.conf"
+#     owner: pms
+#     group: pms
+#     mode: 0644
 
 - template:
-    src: pms.application.conf.tpl 
+    src: "pms.application.conf.tpl"
     dest: "{{basedir}}/pms/etc/application.conf"
     owner: pms
     group: pms
@@ -75,4 +80,9 @@
 
 
 
+- include: backup.pms.log.yml
+  when: pmslogbakdir is defined
+
 - include: zabbix.pms.yml
+
+- include: backup.accountmaster.yml

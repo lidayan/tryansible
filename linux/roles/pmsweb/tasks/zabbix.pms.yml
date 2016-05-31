@@ -5,11 +5,14 @@
     name: [zabbix-agent, zabbix-sender,jq]
     update_cache: yes
 
-- name: restart zabbixagent
-  service:
+- service:
     name: zabbix-agent
     state: stopped
   ignore_errors: yes
+
+- file:
+    path: "/root/scripts"
+    state: directory
 
 - name: render zabbix_agentd.conf & zabbixsender4heartbeat.sh
   template: src={{item.src}} dest={{item.dest}}
@@ -17,11 +20,11 @@
     - src: zabbix_agentd.conf.tpl
       dest: /etc/zabbix/zabbix_agentd.conf
     - src: zabbixsender4heartbeat.sh.tpl
-      dest: /root/zabbixsender4heartbeat.sh
+      dest: /root/scripts/zabbixsender4heartbeat.sh
 
 - cron:
     name: "heartbeat-sender"
-    job: "/bin/bash -x /root/zabbixsender4heartbeat.sh > /tmp/heartbeat.log"
+    job: "/bin/bash -x /root/scripts/zabbixsender4heartbeat.sh > /tmp/heartbeat.log"
     minute: "*/1"
 
 - name: restart zabbixagent

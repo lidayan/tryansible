@@ -3,10 +3,6 @@
 - hosts: all
 
   tasks:
-  - cron:
-      name: test
-      job: "echo okasdf"
-      minute: "*/1"   
-
-
-  - debug: var=hostvars[inventory_hostname]
+  - name: Check for application_conf
+    local_action: stat path={{application_conf}}
+    register: stat_configfile

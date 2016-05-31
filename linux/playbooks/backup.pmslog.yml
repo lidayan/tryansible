@@ -6,12 +6,15 @@
 
   tasks:
 
-  - file:
-      path: "{{pmslogbakdir}}"
-      state: directory
+  - block:
+    - file:
+        path: "{{pmslogbakdir}}"
+        state: directory
 
-  - cron:
-      name: "backup pmslog"
-      job: "cp -u /datayes/invest-platform/pms/logs/* {{pmslogbakdir}}/"
-      minute: "10"
-      hour: "0"
+    - cron:
+        name: "backup pmslog"
+        job: "cp -u /datayes/invest-platform/pms/logs/pms.* {{pmslogbakdir}}/"
+        minute: "10"
+        hour: "0"
+
+    when: pmslogbakdir is defined

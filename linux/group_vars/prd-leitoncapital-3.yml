@@ -1,15 +1,20 @@
 ---
 
-pmsbakdir: /pms/pms03
-attrbakdir: /pms/attribute03
-accountbakdir: /pms/pms03
-pmslogbakdir: /pms/pms03/pmslog
-
 pmsversion: 2.7.0-30
 attrversion: 1.3.0-9
 
-attribution: http://attribute03:9090
-usermaster: http://gw.leitoncapital.wmcloud.com:8080/usermaster
+pmsbakdir: /pms/pms03
+attrbakdir: /pms/attribute03
+accountbakdir: /pms/pms03
+
+### no pmslog backup if not defined 
+pmslogbakdir: /pms/pms03/pmslog
+
+
+### var s in config template
+attribution:
+  host: attribute03
+  port: 9090
 
 accountmaster: 
   host: account03
@@ -17,13 +22,8 @@ accountmaster:
   user: app_platform
   pass: We1come
 
-datayesdb:
-  host: real-prd03.datayes.com
-  port: 3313
-  user: app_pms_ro
-  pass: Welcome2014_0826
-
-trading:  
+trading: 
+  check_mac_addr: "false"
   sailfish: "false"
   enabled: "true"
   client: leitoncapital
@@ -32,6 +32,12 @@ trading:
   user: sys_trade@leitoncapital.com
   token: ae0ed68083d8abf084d6fd742e4a6ab71a6bf18906f3f952b9c7b1b2298b0500
   trader: sys_trade@leitoncapital.com
+
+datayesdb:
+  host: real-prd03.datayes.com
+  port: 3313
+  user: app_pms_ro
+  pass: Welcome2014_0826
 
 dataapi:
   host: http://vip.newapi.wmcloud.com/v1/api
@@ -42,9 +48,14 @@ mdl:
   port: 9379
   token: no_token
 
+usermaster: http://gw.leitoncapital.datayes.net:8080/usermaster
+
 web_url:
-  pms: http://gw.leitoncapital.wmcloud.com/pms/
+  pms: http://gw.leitoncapital.datayes.net/pms03
   f2e: http://achilles.wmcloud.com
-  gw_wmcloud: http://gw.leitoncapital.wmcloud.com
-  app_wmcloud: http://app.leitoncapital.wmcloud.com
-  compliance: http://tiger03:9000/compliance
+  gw: http://gw.leitoncapital.datayes.net
+  app: http://app.leitoncapital.datayes.net
+  compliance: http://tiger02:9000/compliance
+
+business:
+  order_audit_enabled: 'false'

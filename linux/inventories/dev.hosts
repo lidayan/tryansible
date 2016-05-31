@@ -3,4 +3,6 @@ localhost
 
 
 [dev]
-buildmaster02-dev.datayes.com
+pms01.wmcloud-dev.com               ansible_host=buildmaster02-dev.datayes.com
+attribute01.wmcloud-dev.com         ansible_host=buildmaster02-dev.datayes.com
+account01.wmcloud-dev.com           ansible_host=buildmaster02-dev.datayes.com

@@ -1,10 +1,14 @@
 ---
 # tasks file for account
 
+- local_action: stat path="../file/pms-{{version}}-database.tar.gz"
+  register: file_stat
+
 - assert:
     that:
     - pmsversion is defined
     - accountbakdir is defined
+    - file_stat.stat.exists
 
 - include: init.mysql.yml
 
@@ -34,7 +38,7 @@
 - service:
     name: pms_server
     state: stopped
-  delegate_to: "pms0{{ansible_fqdn.split('0')[1]}}"
+  delegate_to: "pms0{{inventory_hostname.split('0')[1]}}"
   ignore_errors: yes
   register: pms_service
   when: currVersion != "null" and currVersion != version
@@ -45,19 +49,25 @@
     executable: /bin/bash
     chdir: "{{basedir}}"
   shell: |
-    PATH=/opt/mysql/server-5.6/bin/:$PATH
-    bakfile={{accountbakdir}}/bak.$(date +%Y%m%d).account.sql.gz
-    mysqldump -u{{accountmaster.user}} -p{{accountmaster.pass}} -h{{accountmaster.host}} accountmaster 2>/dev/null | gzip > $bakfile 2>/dev/null
+    if [ -n `ls pms-*.tar.gz` ]; then
+      PATH=/opt/mysql/server-5.6/bin/:$PATH
+      bakfile={{accountbakdir}}/bak.$(date +%Y%m%d).account.sql.gz
+      mysqldump -uapp_platform -pWe1come accountmaster 2>/dev/null | gzip > $bakfile 2>/dev/null
+      rm pms-*.tar.gz
+      rm -rf database
+    fi
 
-- name: download & extract
+- copy:
+    src: "/datayes/invest-platform/pms-{{version}}-database.tar.gz"
+    dest: "../file/pms-{{version}}-database.tar.gz"
+
+- name: extract
   args:
     executable: /bin/bash
     chdir: "{{basedir}}"
   shell: |
-    rm pms-*-database.tar.gz
-    wget {{pkgurl}}
     if [ ! -f {{pkgname}} ]; then 
-      echo downloadpackage failed >&2
+      echo package not exists >&2
       exit 1
     else
       tar -zxf {{pkgname}}
@@ -73,7 +83,7 @@
     PATH=/opt/mysql/server-5.6/bin/:$PATH
     tar -zxf {{pkgname}}
     cd database
-    ./refresh_db.sh -u {{accountmaster.user}} -p '{{accountmaster.pass}}' -h '{{accountmaster.host}}' accountmaster 
+    ./refresh_db.sh -u app_platform -p 'We1come' accountmaster 
   when: currVersion == "null"
 
 - name: update database
@@ -87,7 +97,7 @@
     ## function for execute sql script
     function runsql(){
       sqlfile=$1
-      cat $sqlfile | mysql -u{{accountmaster.user}} -p{{accountmaster.pass}} -h{{accountmaster.host}} accountmaster >../../${sqlfile}.out  2>&1
+      cat $sqlfile | mysql  -uapp_platform -pWe1come accountmaster >../../${sqlfile}.out  2>&1
       if [ $? -ne 0 ];then
         echo execute $sqlfile failed >&2
         exit 1
@@ -122,6 +132,6 @@
 - service:
     name: pms_server
     state: started
-  delegate_to: "pms0{{ansible_fqdn.split('0')[1]}}"
+  delegate_to: "pms0{{inventory_hostname.split('0')[1]}}"
   ignore_errors: yes
   when: pms_service | changed

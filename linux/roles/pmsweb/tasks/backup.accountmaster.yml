@@ -1,0 +1,20 @@
+---
+
+
+- apt:
+    name: [mysql]
+    update_cache: yes
+
+- file:
+    path: "/root/scripts"
+    state: directory
+
+- template: 
+    src: 'backup_accountmaster.sh.tpl'
+    dest: '/root/scripts/backup_accountmaster.sh'
+
+- cron:
+    name: "backup-database"
+    job: "/bin/bash -x /root/scripts/backup_accountmaster.sh > /tmp/backup.log"
+    minute: "30"
+    hour: "0"

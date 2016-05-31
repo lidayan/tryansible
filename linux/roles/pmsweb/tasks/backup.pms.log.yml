@@ -1,3 +1,4 @@
+---
 
 
 - file:
@@ -6,6 +7,7 @@
 
 - cron:
     name: "backup pmslog"
-    job: "cp -u /datayes/invest-platform/pms/logs/* {{pmslogbakdir}}/"
-    minute: "0"
+    job: "cp -u /datayes/invest-platform/pms/logs/pms.* {{pmslogbakdir}}/"
+    minute: "10"
     hour: "0"
+

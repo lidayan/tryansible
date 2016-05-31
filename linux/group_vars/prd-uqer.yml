@@ -1,20 +1,18 @@
 ---
 
-pmsversion: 2.7.1-52
-attrversion: 1.4.0-6
-
+pmsversion: 2.5.7-62
+attrversion: 1.3.0-9
+sailfishversion: 1.1.0-14
 
 pmsbakdir: /datayes
 attrbakdir: /datayes
-accountbakdir: /db
-
-### no pmslog backup if not defined 
-# pmslogbakdir: /pms/pmslog
+accountbakdir: /datayes
+sailfishbakdir: /datayes
 
 
 ### var s in config template
 attribution:
-  host: localhost
+  host: 'localhost'
   port: 9090
 
 accountmaster: 
@@ -25,14 +23,20 @@ accountmaster:
 
 trading: 
   check_mac_addr: "false"
-  sailfish: "false"
-  enabled: "true"
-  client: invest
-  host : tiger01.invest.wmcloud.com
+  sailfish: "true"
+  enabled: "false"
+  client: ""
+  host : ""
   port: 3336
-  user: app.trade@datayes.com
-  token: 16f98aaad4e43afcca45744a84cd50647e041f9ecb2298ec8ba1a24707b96fc8
-  trader: peng.zhang@datayes.com
+  user: ""
+  token: ""
+  trader: ""
+
+datayesdb:
+  host: real-prd03.datayes.com
+  port: 3313
+  user: app_pms_ro
+  pass: Welcome2014_0826
 
 dataapi:
   host: http://vip.newapi.wmcloud.com/v1/api
@@ -43,20 +47,18 @@ mdl:
   port: 9379
   token: no_token
 
-datayesdb:
-  host: real-prd03.datayes.com
-  port: 3313
-  user: app_pms_ro
-  pass: Welcome2014_0826
-
 usermaster: http://usermaster01.gw.wmcloud.com
 
 web_url:
-  pms: https://gw.wmcloud.com/pms_public
+  pms: https://gw.wmcloud.com/pms_uqer
   f2e: https://achilles.wmcloud.com
   gw: https://gw.wmcloud.com
   app: https://app.wmcloud.com
-  compliance: http://tiger01.invest.wmcloud.com:9000/compliance
+  compliance: ""
 
 business:
   order_audit_enabled: 'false'
+
+heartbeat:
+  attribution:
+    enabled: "false"

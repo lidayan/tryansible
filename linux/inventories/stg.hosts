@@ -1,7 +1,7 @@
 
 [stg-common]
 pms01.wmcloud-stg.com                        ansible_host=invest01.cloud-stg.datayes.com
-account01.wmcloud-stg.com                   ansible_host=invest01-db.cloud-stg.datayes.com
+account01.wmcloud-stg.com                    ansible_host=invest01-db.cloud-stg.datayes.com
 
 tiger04.cloud-stg.datayes.com
 mq04.cloud-stg.datayes.com

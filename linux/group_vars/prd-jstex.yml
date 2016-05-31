@@ -1,9 +1,63 @@
 ---
 
-pmsbakdir: /pms
-attrbakdir: /pms
-accountbakdir: /pms
-pmslogbakdir: /pms/pmslog
 
 pmsversion: 2.7.1-51
 attrversion: 1.4.0-6
+
+
+pmsbakdir: /pms
+attrbakdir: /pms
+accountbakdir: /pms
+
+### no pmslog backup if not defined 
+pmslogbakdir: /pms/pmslog
+
+
+### var s in config template
+attribution:
+  host: attribute01
+  port: 9090
+
+accountmaster: 
+  host: account01
+  port: 3306
+  user: app_platform
+  pass: We1come
+
+trading: 
+  check_mac_addr: "false"
+  sailfish: "false"
+  enabled: "true"
+  client: jstex
+  host : tiger01
+  port: 3336
+  user: sys_trade@jstex.com
+  token: ae0ed68083d8abf084d6fd742e4a6ab71a6bf18906f3f952b9c7b1b2298b0500
+  trader: admin@jstex.com
+
+datayesdb:
+  host: db-zgy-mysql01.datayes.net
+  port: 3313
+  user: app_pms_ro
+  pass: UXTkhAtmiwTQ3NMN
+
+dataapi:
+  host: http://newdataapi.datayes.net/v1/api
+  token: no_token
+
+mdl:
+  host: feeder01.sharezone.datayes.net
+  port: 9379
+  token: no_token
+
+usermaster: http://gw.jstex.datayes.net:8080/usermaster
+
+web_url:
+  pms: http://gw.jstex.datayes.net/pms
+  f2e: http://achilles.wmcloud.com
+  gw: http://gw.jstex.datayes.net
+  app: http://app.jstex.datayes.net
+  compliance: http://tiger01:9000/compliance
+
+business:
+  order_audit_enabled: 'false'
